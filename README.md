@@ -3,7 +3,7 @@
 **Zero-IoT Virtual Agro-Sensor Twins & Offline Zero-Literacy Agronomic Reference Systems for Climate-Vulnerable Smallholder Farming**
 
 [![Website](https://img.shields.io/badge/Portal-agricultureatlas.org-0f766e?style=flat-square)](https://agricultureatlas.org)
-[![Zenodo DOI](https://img.shields.io/badge/Zenodo_DOI-Pending_Upload_(10.5281%2Fzenodo.XXXXXXX)-1d4ed8?style=flat-square)](docs/technical-report/AGRICULTURE_ATLAS_TECHNICAL_REPORT_V1.md)
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24465445.svg)](https://doi.org/10.5281/zenodo.24465445)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0005--3514--106X-a6ce39?style=flat-square&logo=orcid&logoColor=white)](https://orcid.org/0009-0005-3514-106X)
 [![Code License](https://img.shields.io/badge/Code_License-Apache--2.0-blue?style=flat-square)](LICENSE)
 [![Data License](https://img.shields.io/badge/Report_%26_Data-CC--BY--4.0-emerald?style=flat-square)](DATA_LICENSE.md)
@@ -188,8 +188,9 @@ If you use Agriculture Atlas software, schemas, or the v1.0 Technical Report in 
   year        = {2026},
   month       = {11},
   number      = {AA-TR-2026-01 (Version 1.0.0)},
-  url         = {https://agricultureatlas.org/research},
-  note        = {Principal Investigator: Van Le (Lê Thành Văn), ORCID: 0009-0005-3514-106X. Code: https://github.com/vantbhp/agricultureatlas. Zenodo DOI pending upload: 10.5281/zenodo.XXXXXXX}
+  doi         = {10.5281/zenodo.24465446},
+  url         = {https://doi.org/10.5281/zenodo.24465446},
+  note        = {Principal Investigator: Van Le (Lê Thành Văn), ORCID: 0009-0005-3514-106X. Code: https://github.com/vantbhp/agricultureatlas. Concept DOI (all versions): https://doi.org/10.5281/zenodo.24465445}
 }
 ```
 

@@ -107,7 +107,8 @@ const bibtex = [
   '  month        = nov,',
   `  url          = {${SITE_URL}/research/},`,
   `  code         = {${GITHUB_URL}},`,
-  '  note         = {Zenodo DOI pending Phase 1 archival deposit; non-commercial open science}',
+  '  doi          = {10.5281/zenodo.24465446},',
+  '  note         = {Concept DOI (all versions): https://doi.org/10.5281/zenodo.24465445; non-commercial open science}',
   '}',
 ].join('\n');
 ---
@@ -213,7 +214,11 @@ const bibtex = [
             </div>
             <div>
               <dt>{t(lang, 'research.citation.zenodo_label')}</dt>
-              <dd>{t(lang, 'research.citation.zenodo_status')}</dd>
+              <dd>
+                <a class="text-link" href="https://doi.org/10.5281/zenodo.24465446" target="_blank" rel="noopener noreferrer"><code>10.5281/zenodo.24465446</code></a>
+                <span class="sep" aria-hidden="true">·</span>
+                <a class="text-link" href="https://doi.org/10.5281/zenodo.24465445" target="_blank" rel="noopener noreferrer"><code>10.5281/zenodo.24465445</code> (all versions)</a>
+              </dd>
             </div>
             <div>
               <dt>{t(lang, 'research.citation.osf_label')}</dt>

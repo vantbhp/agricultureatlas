@@ -5,6 +5,14 @@ title: "Agriculture Atlas: Zero-IoT Virtual Agro-Sensor Twins and Offline Zero-L
 abstract: "Agriculture Atlas is a non-commercial, open-science agronomic intelligence initiative that transforms Uber H3 spatial cells into Zero-IoT Virtual Agro-Sensor Twins by coupling deterministic FAO-56 Penman-Monteith agro-physics with an MIT/Apache-2.0 four-SKU foundation model stack on Microsoft Azure NVIDIA GPUs and NVIDIA Brev, paired with sub-5 KB offline delta synchronization and zero-literacy voice-first mobile interfaces for smallholder farmers."
 version: "1.0.0"
 date-released: "2026-11-23"
+doi: "10.5281/zenodo.24465445"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24465445"
+    description: "Zenodo Concept DOI (always resolves to the latest version)"
+  - type: doi
+    value: "10.5281/zenodo.24465446"
+    description: "Zenodo Version v1.0.0 Archive DOI"
 license: Apache-2.0
 repository-code: "https://github.com/vantbhp/agricultureatlas"
 url: "https://agricultureatlas.org"
@@ -48,5 +56,6 @@ preferred-citation:
   institution:
     name: "Agriculture Atlas Open-Science Initiative"
     website: "https://agricultureatlas.org"
-  url: "https://agricultureatlas.org/research"
-  notes: "Zenodo DOI pending upload: 10.5281/zenodo.XXXXXXX"
+  doi: "10.5281/zenodo.24465446"
+  url: "https://doi.org/10.5281/zenodo.24465446"
+  notes: "Zenodo Version v1.0.0 DOI: 10.5281/zenodo.24465446 | Concept DOI (all versions): 10.5281/zenodo.24465445"

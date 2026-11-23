@@ -11,7 +11,7 @@
 | **Official Portal & Research Hub** | [`https://agricultureatlas.org`](https://agricultureatlas.org) · [`https://agricultureatlas.org/research`](https://agricultureatlas.org/research) · [`https://agricultureatlas.org/vi/research`](https://agricultureatlas.org/vi/research) |
 | **API Reference Gateway** | [`https://api.agricultureatlas.org`](https://api.agricultureatlas.org) |
 | **Open-Source Repository** | [`https://github.com/vantbhp/agricultureatlas`](https://github.com/vantbhp/agricultureatlas) |
-| **Persistent Identifier** | `[Zenodo DOI pending upload: 10.5281/zenodo.XXXXXXX]` |
+| **Persistent Identifier** | **Version v1.0.0 DOI:** [`10.5281/zenodo.24465446`](https://doi.org/10.5281/zenodo.24465446) · **Concept DOI (All Versions):** [`10.5281/zenodo.24465445`](https://doi.org/10.5281/zenodo.24465445) |
 | **Licensing** | Code: **Apache-2.0** (`LICENSE`) · Technical Report & Original Reference Data: **CC-BY-4.0** (`DATA_LICENSE.md`) |
 | **Correspondence** | `van.le@agricultureatlas.org` · `research@agricultureatlas.org` · `grants@agricultureatlas.org` · `hello@agricultureatlas.org` |
 | **Alignment** | UN SDG #2 (Zero Hunger) · UN SDG #13 (Climate Action) · FAIR Guiding Principles |
@@ -345,7 +345,7 @@ Under Vietnam's **Law on Hydrometeorology (Law No. 90/2015/QH13)** and **Decree 
 ### 8.1 FAIR Guiding Principles Implementation
 
 Agriculture Atlas operationalizes the FAIR Guiding Principles [@wilkinson2016fair]:
-- **Findable:** Persistent Zenodo release archive (`[Zenodo DOI pending upload: 10.5281/zenodo.XXXXXXX]`), machine-readable `CITATION.cff` (CFF 1.2.0) and `.zenodo.json`, PI ORCID (`0009-0005-3514-106X`), and globally unique Uber H3 and Overture Maps GERS identifiers.
+- **Findable:** Persistent Zenodo release archive (**Version v1.0.0 DOI:** [`10.5281/zenodo.24465446`](https://doi.org/10.5281/zenodo.24465446); **Concept DOI:** [`10.5281/zenodo.24465445`](https://doi.org/10.5281/zenodo.24465445)), machine-readable `CITATION.cff` (CFF 1.2.0) and `.zenodo.json`, PI ORCID (`0009-0005-3514-106X`), and globally unique Uber H3 and Overture Maps GERS identifiers.
 - **Accessible:** Public GitHub repository (`https://github.com/vantbhp/agricultureatlas`), Apache-2.0 source code, CC-BY-4.0 technical report/reference metadata, and `< 5 KB` offline packets accessible over 2G rural links.
 - **Interoperable:** OGC-compliant PostGIS (`EPSG:4326`), Uber H3 hierarchical keys, CF-compliant NetCDF/Zarr tensors for EO/climate inputs, OpenAPI 3.1 JSON REST endpoints, and standard Hugging Face / ONNX / LiteRT-LM model artifacts.
 - **Reusable:** SHA-256 architecture contract locks (`configs/contract_lock.json`), explicit third-party license ledger (`DATA_LICENSE.md`), deterministic physics equations, and SQL-enforced temporal zero-leakage views.

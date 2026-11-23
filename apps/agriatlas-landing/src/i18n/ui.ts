@@ -177,8 +177,8 @@ export const dict = {
     'research.citation.lead':
       'All public source code, deterministic physics modules, and citation metadata are maintained openly for independent audit and grant review.',
     'research.citation.repo_label': 'Source repository & CITATION.cff',
-    'research.citation.zenodo_label': 'Zenodo technical report archive',
-    'research.citation.zenodo_status': 'Zenodo DOI pending archival deposit upon Phase 1 release (tracked via CITATION.cff in repository).',
+    'research.citation.zenodo_label': 'Zenodo DOI archive',
+    'research.citation.zenodo_status': 'v1.0.0 DOI: 10.5281/zenodo.24465446 · Concept DOI (all versions): 10.5281/zenodo.24465445',
     'research.citation.osf_label': 'OSF preregistration protocol',
     'research.citation.osf_status': 'Open Science Framework preregistration slot prepared for RQ1–RQ4 causal vintage evaluation.',
     'research.citation.dataset_label': 'Verified open Vietnam agronomic dataset',
@@ -399,8 +399,8 @@ export const dict = {
     'research.citation.lead':
       'Toàn bộ mã nguồn công khai, mô-đun vật lý xác định và siêu dữ liệu trích dẫn được duy trì mở để phục vụ phản biện độc lập và thẩm định tài trợ.',
     'research.citation.repo_label': 'Kho mã nguồn & CITATION.cff',
-    'research.citation.zenodo_label': 'Lưu trữ báo cáo kỹ thuật Zenodo',
-    'research.citation.zenodo_status': 'Zenodo DOI đang chờ cấp khi phát hành lưu trữ Giai đoạn 1 (theo dõi qua tệp CITATION.cff trong kho mã nguồn).',
+    'research.citation.zenodo_label': 'Lưu trữ Zenodo DOI',
+    'research.citation.zenodo_status': 'DOI bản v1.0.0: 10.5281/zenodo.24465446 · Concept DOI (mọi phiên bản): 10.5281/zenodo.24465445',
     'research.citation.osf_label': 'Quy trình đăng ký trước OSF',
     'research.citation.osf_status': 'Vị trí đăng ký trước trên Open Science Framework cho quy trình kiểm chứng mốc thời gian nhân quả RQ1–RQ4.',
     'research.citation.dataset_label': 'Bộ dữ liệu nông học mở tại Việt Nam đã xác minh',
