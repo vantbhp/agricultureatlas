@@ -1,0 +1,73 @@
+{
+  "project": "Agriculture Atlas",
+  "domain": "https://agricultureatlas.org",
+  "chat_domain_en": "https://agricultureatlas.org/en/chat",
+  "chat_domain_vi": "https://agricultureatlas.org/vi/chat",
+  "api_domain": "https://api.agricultureatlas.org",
+  "legal_status": "100% Non-Commercial, Non-Profit Public Good (UN SDG #2 & SDG #13)",
+  "air_gapped_open_science": true,
+  "version": "1.0.0-vn-pilot",
+  "locked_at": "2026-11-05T08:00:00+07:00",
+  "typography_dna": {
+    "standard": "COMPACT_REFINED_PRO_11PX_13PX",
+    "max_font_size_ceiling_px": 22,
+    "banned_font_sizes_px": [24, 28, 32, 36, 40, 48],
+    "rules": {
+      "kpi_number": {
+        "font_size": "18px-22px",
+        "font_weight": 700,
+        "font_family": "JetBrains Mono, monospace"
+      },
+      "section_title_h2_h3": {
+        "font_size": "15px-18px",
+        "font_weight": 600,
+        "font_family": "Inter, system-ui, sans-serif"
+      },
+      "body_text_p": {
+        "font_size": "13px-13.5px",
+        "line_height": 1.5,
+        "font_family": "Inter, system-ui, sans-serif"
+      },
+      "kpi_label_caption_subtitle": {
+        "font_size": "11px-13px",
+        "font_family": "Inter, system-ui, sans-serif"
+      },
+      "table_cell_badge_button_code": {
+        "font_size": "11px-12px",
+        "font_family": "JetBrains Mono, monospace"
+      }
+    }
+  },
+  "color_palette": {
+    "web_scientific_atlas": {
+      "background_primary": "#080B10",
+      "background_surface": "#0E141D",
+      "background_elevated": "#131C28",
+      "border_subtle": "#1E293B",
+      "accent_primary_cyan": "#00F0FF",
+      "accent_secondary_emerald": "#10B981",
+      "text_primary": "#F8FAFC",
+      "text_secondary": "#94A3B8",
+      "text_muted": "#64748B"
+    },
+    "mobile_zero_literacy_traffic_light": {
+      "obsidian_battery_saver": "#080B10",
+      "outdoor_sun_high_contrast_bg": "#000000",
+      "safe_green": "#10B981",
+      "warning_irrigation_amber": "#F59E0B",
+      "danger_frost_salinity_pest_red": "#EF4444",
+      "voice_pulse_cyan": "#00F0FF"
+    }
+  },
+  "ui_mandatory_states": [
+    "Loading",
+    "Empty",
+    "Error",
+    "Populated"
+  ],
+  "vietnam_sovereignty_guard": {
+    "enforce_hoang_sa_da_nang": true,
+    "enforce_truong_sa_khanh_hoa": true,
+    "iso_country_code": "VN"
+  }
+}

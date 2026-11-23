@@ -1,0 +1,143 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+// Self-hosted fonts with full Vietnamese glyph coverage (no CDN; unicode-range splits subsets).
+import '@fontsource-variable/anybody/standard.css';
+import '@fontsource-variable/google-sans/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
+import { t } from '../i18n/ui';
+import {
+  CONTACT_EMAIL,
+  DEFAULT_LANG,
+  GITHUB_URL,
+  GRANTS_EMAIL,
+  LANGS,
+  PI_EMAIL,
+  PI_ORCID_URL,
+  RESEARCH_EMAIL,
+  SITE_URL,
+  localePath,
+  type Lang,
+} from '../i18n/types';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description: string;
+  /** Site-relative, unlocalized path, e.g. '/' or '/privacy'. */
+  path: string;
+}
+
+const { lang, title, description, path } = Astro.props;
+
+const canonical = new URL(localePath(path, lang), SITE_URL).href;
+const alternates = LANGS.map((l) => ({ lang: l, href: new URL(localePath(path, l), SITE_URL).href }));
+const xDefault = new URL(localePath(path, DEFAULT_LANG), SITE_URL).href;
+const ogImage = new URL('/og-default.svg', SITE_URL).href;
+const ogLocale = lang === 'vi' ? 'vi_VN' : 'en_US';
+const ogLocaleAlt = lang === 'vi' ? 'en_US' : 'vi_VN';
+const homeUrl = new URL(localePath('/', lang), SITE_URL).href;
+
+const isResearch = path === '/research';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['Organization', 'NGO', 'ResearchOrganization'],
+      '@id': `${SITE_URL}/#organization`,
+      name: 'Agriculture Atlas',
+      url: SITE_URL,
+      logo: new URL('/logo.svg', SITE_URL).href,
+      email: RESEARCH_EMAIL,
+      description: t(lang, 'meta.description'),
+      nonprofitStatus: 'Nonprofit',
+      sameAs: [GITHUB_URL],
+      areaServed: { '@type': 'Country', name: 'Viet Nam', identifier: 'VN' },
+      founder: { '@id': `${SITE_URL}/#pi-van-le` },
+      contactPoint: [
+        { '@type': 'ContactPoint', contactType: 'research', email: RESEARCH_EMAIL },
+        { '@type': 'ContactPoint', contactType: 'grants', email: GRANTS_EMAIL },
+        { '@type': 'ContactPoint', contactType: 'principal investigator', email: PI_EMAIL },
+        { '@type': 'ContactPoint', contactType: 'general', email: CONTACT_EMAIL },
+      ],
+    },
+    {
+      '@type': 'Person',
+      '@id': `${SITE_URL}/#pi-van-le`,
+      name: 'Van Le',
+      alternateName: 'Lê Thành Văn',
+      jobTitle: 'Principal Investigator & Lead AI Systems Architect',
+      email: PI_EMAIL,
+      affiliation: { '@id': `${SITE_URL}/#organization` },
+      sameAs: [PI_ORCID_URL],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      url: homeUrl,
+      name: 'Agriculture Atlas',
+      description: t(lang, 'meta.description'),
+      inLanguage: lang,
+      publisher: { '@id': `${SITE_URL}/#organization` },
+    },
+    ...(isResearch
+      ? [
+          {
+            '@type': 'ResearchProject',
+            '@id': `${SITE_URL}/#research-lab`,
+            name: title,
+            description,
+            url: canonical,
+            inLanguage: lang,
+            parentOrganization: { '@id': `${SITE_URL}/#organization` },
+            member: { '@id': `${SITE_URL}/#pi-van-le` },
+            sameAs: [GITHUB_URL],
+          },
+        ]
+      : []),
+  ],
+};
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#070A0E" />
+    <meta name="color-scheme" content="dark" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Agriculture Atlas" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t(lang, 'nav.skip')}</a>
+    <SiteHeader lang={lang} path={path} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter lang={lang} />
+  </body>
+</html>

@@ -1,0 +1,43 @@
+/*
+ * Agriculture Atlas landing v3 — "A season from orbit"
+ * Dark observation-deck chrome (same night as agricultureatlas.org/vi/chat); all colour comes from
+ * the living field canvas. Cyan #00F0FF is reserved for the machine/sensor layer only.
+ * Founder decision 2026-11-04: the 22px ceiling does not apply to this landing.
+ */
+:root {
+  --night: #070A0E;
+  --night-2: #0D1218;
+  --night-3: #141B23;
+  --line: rgb(226 236 232 / 0.12);
+  --line-strong: rgb(226 236 232 / 0.28);
+
+  --text: #EEF3F0;
+  --text-2: #A9B6B1;
+  --text-3: #75827E;
+
+  --cyan: #00F0FF;
+  --emerald: #10B981;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --gold: #D9B24C;
+  --silt: #8E8566;
+
+  --display: 'Anybody Variable', 'Google Sans Variable', system-ui, sans-serif;
+  --sans: 'Google Sans Variable', 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  /* fluid type scale (360px → 1600px) */
+  --fs-mega: clamp(46px, 8.4vw, 136px);
+  --fs-xl: clamp(32px, 4.6vw, 72px);
+  --fs-l: clamp(24px, 2.6vw, 40px);
+  --fs-m: clamp(18px, 1.5vw, 22px);
+  --fs-body: clamp(15.5px, 1.1vw, 17.5px);
+  --fs-small: 14px;
+  --fs-micro: 12px;
+
+  --gutter: clamp(20px, 4vw, 64px);
+  --maxw: 1480px;
+  --tap: 44px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

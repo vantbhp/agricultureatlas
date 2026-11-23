@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeView from '../components/HomeView.astro';
+import { t } from '../i18n/ui';
+import type { Lang } from '../i18n/types';
+
+const lang: Lang = 'en';
+---
+
+<BaseLayout lang={lang} title={t(lang, 'meta.title')} description={t(lang, 'meta.description')} path="/">
+  <HomeView lang={lang} />
+</BaseLayout>

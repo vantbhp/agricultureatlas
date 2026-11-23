@@ -1,0 +1,291 @@
+---
+import { t } from '../i18n/ui';
+import {
+  CONTACT_EMAIL,
+  GITHUB_URL,
+  GRANTS_EMAIL,
+  PI_EMAIL,
+  PI_NAME,
+  PI_ORCID_ID,
+  PI_ORCID_URL,
+  RESEARCH_EMAIL,
+  chatDisplayUrl,
+  localePath,
+  type Lang,
+} from '../i18n/types';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const assistantDisplay = chatDisplayUrl(lang);
+const researchDisplay = lang === 'vi' ? 'agricultureatlas.org/vi/research' : 'agricultureatlas.org/research';
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <div class="about">
+      <p class="tagline">{t(lang, 'footer.tagline')}</p>
+      <p class="sdg">{t(lang, 'footer.sdg')}</p>
+    </div>
+    <nav class="links" aria-label={t(lang, 'footer.contact')}>
+      <ul role="list">
+        <li><a href={localePath('/research', lang)}>{t(lang, 'footer.research')}</a></li>
+        <li><a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">{t(lang, 'footer.github')}</a></li>
+        <li><a href={localePath('/privacy', lang)}>{t(lang, 'footer.privacy')}</a></li>
+        <li><a href={localePath('/terms', lang)}>{t(lang, 'footer.terms')}</a></li>
+        <li><a href={`mailto:${CONTACT_EMAIL}`}>{t(lang, 'footer.contact')} · <code>{CONTACT_EMAIL}</code></a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container leadership" aria-labelledby="footer-leadership-title">
+    <h2 id="footer-leadership-title" class="leadership-title">{t(lang, 'footer.leadership_heading')}</h2>
+    <ul class="leadership-list" role="list">
+      <li class="leadership-item">
+        <span class="leadership-label">{t(lang, 'footer.pi_role')}:</span>
+        <strong class="leadership-name">{PI_NAME}</strong>
+      </li>
+      <li class="leadership-item">
+        <span class="leadership-label">{t(lang, 'footer.pi_email_label')}:</span>
+        <a class="leadership-link" href={`mailto:${PI_EMAIL}`}><code class="leadership-code">{PI_EMAIL}</code></a>
+        <span class="leadership-sep" aria-hidden="true">|</span>
+        <span class="leadership-label">{t(lang, 'footer.grants_email_label')}:</span>
+        <a class="leadership-link" href={`mailto:${RESEARCH_EMAIL}`}><code class="leadership-code">{RESEARCH_EMAIL}</code></a>
+        <span class="leadership-sep" aria-hidden="true">|</span>
+        <span class="leadership-label">{t(lang, 'footer.grants_direct_label')}:</span>
+        <a class="leadership-link" href={`mailto:${GRANTS_EMAIL}`}><code class="leadership-code">{GRANTS_EMAIL}</code></a>
+      </li>
+      <li class="leadership-item">
+        <span class="leadership-label">{t(lang, 'footer.orcid_label')}:</span>
+        <a class="leadership-link" href={PI_ORCID_URL} target="_blank" rel="noopener noreferrer">
+          <code class="leadership-code">{PI_ORCID_URL} ({PI_ORCID_ID})</code>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Giant wordmark: SVG fallback always fits (textLength); JS upgrades it to a window onto the living field. -->
+  <div class="container giant" data-giant aria-hidden="true">
+    <svg class="giant-svg" viewBox="0 0 1000 190" preserveAspectRatio="none">
+      <text x="0" y="160" font-size="200" textLength="1000" lengthAdjust="spacingAndGlyphs">Agriculture Atlas</text>
+    </svg>
+    <canvas class="giant-canvas"></canvas>
+  </div>
+
+  <div class="container imprint">
+    <p>{t(lang, 'footer.copyright')}</p>
+    <p aria-hidden="true">agricultureatlas.org · {researchDisplay} · {assistantDisplay} · api.agricultureatlas.org</p>
+  </div>
+</footer>
+
+<script>
+  import { sharedScene, renderField } from '../lib/landscape';
+
+  const wrap = document.querySelector<HTMLElement>('[data-giant]');
+  const canvas = wrap?.querySelector<HTMLCanvasElement>('.giant-canvas');
+  const FONT_FAMILY = '"Anybody Variable", "Google Sans Variable", system-ui, sans-serif';
+  const WORDMARK = 'Agriculture Atlas';
+
+  if (wrap && canvas && canvas.getContext) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ctx = canvas.getContext('2d')!;
+    const fieldCanvas = document.createElement('canvas');
+    let scene: ReturnType<typeof sharedScene> | null = null;
+    let w = 0, h = 0, size = 0, baseline = 0, dpr = 1;
+    let visible = false, raf = 0, last = performance.now();
+    let season = 0.55, reveal = reduce ? 1 : 0, revealStart = 0;
+    let pointer: { x: number; y: number } | null = null;
+    const lens = { x: 0, y: 0 };
+
+    const setFont = (px: number) => {
+      ctx.font = `800 ${px}px ${FONT_FAMILY}`;
+      if ('fontStretch' in ctx) (ctx as CanvasRenderingContext2D & { fontStretch: string }).fontStretch = 'expanded';
+    };
+
+    function layout() {
+      const cs = getComputedStyle(wrap!);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      w = wrap!.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      setFont(100);
+      const m = ctx.measureText(WORDMARK);
+      size = (100 * w) / (m.width || 1);
+      const asc = (m.actualBoundingBoxAscent || 72) * (size / 100);
+      const desc = (m.actualBoundingBoxDescent || 18) * (size / 100);
+      h = Math.ceil(asc + desc + size * 0.04);
+      baseline = asc + size * 0.02;
+      canvas!.style.width = `${w}px`;
+      canvas!.style.height = `${h}px`;
+      canvas!.width = Math.round(w * dpr);
+      canvas!.height = Math.round(h * dpr);
+    }
+
+    function draw(now: number) {
+      raf = 0;
+      const dt = Math.min(64, now - last); last = now;
+      if (!reduce) {
+        season = (season + dt / 52000) % 1;
+        if (!revealStart) revealStart = now;
+        reveal = Math.min(1, (now - revealStart) / 1600);
+      }
+      if (pointer) { lens.x += (pointer.x - lens.x) * 0.18; lens.y += (pointer.y - lens.y) * 0.18; }
+
+      scene ??= sharedScene();
+      renderField(fieldCanvas, scene, { w, h, dpr, zoom: 1.6, focusX: 0.5, focusY: 0.42 }, {
+        season,
+        hexAlpha: 0.35,
+        lens: pointer ? { x: lens.x, y: lens.y, r: Math.max(60, h * 0.42), alpha: 1, mode: 'soil_moisture' } : null,
+      });
+
+      const ease = 1 - Math.pow(1 - reveal, 3);
+      const wipe = w * dpr * ease;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas!.width, canvas!.height);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      setFont(size);
+      ctx.textBaseline = 'alphabetic';
+
+      // 1) field visible only through the letters, wiped in from the left
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, 0, wipe / dpr, h); ctx.clip();
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(fieldCanvas, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.fillText(WORDMARK, 0, baseline);
+      ctx.restore();
+
+      // 2) cyan outline over the full word (ghost before the wipe, solid after)
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = Math.max(1, size / 260);
+      ctx.strokeStyle = 'rgb(0 240 255 / 0.22)';
+      ctx.strokeText(WORDMARK, 0, baseline);
+      ctx.save();
+      ctx.beginPath(); ctx.rect(0, 0, wipe / dpr, h); ctx.clip();
+      ctx.strokeStyle = 'rgb(0 240 255 / 0.75)';
+      ctx.strokeText(WORDMARK, 0, baseline);
+      ctx.restore();
+
+      // 3) scanning edge while revealing
+      if (ease < 0.995) {
+        const x = wipe / dpr;
+        const g = ctx.createLinearGradient(x - 60, 0, x, 0);
+        g.addColorStop(0, 'rgb(0 240 255 / 0)');
+        g.addColorStop(1, 'rgb(0 240 255 / 0.35)');
+        ctx.fillStyle = g; ctx.fillRect(x - 60, 0, 60, h);
+        ctx.fillStyle = '#00F0FF'; ctx.fillRect(x - 1, 0, 2, h);
+      }
+
+      if (visible && !reduce) raf = requestAnimationFrame(draw);
+    }
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(draw); };
+
+    wrap.addEventListener('pointermove', (e) => {
+      const r = canvas.getBoundingClientRect();
+      const p = { x: e.clientX - r.left, y: e.clientY - r.top };
+      if (!pointer) { lens.x = p.x; lens.y = p.y; }
+      pointer = p;
+      if (reduce) schedule();
+    });
+    wrap.addEventListener('pointerleave', () => { pointer = null; if (reduce) schedule(); });
+
+    document.fonts.load(`800 100px ${FONT_FAMILY}`).catch(() => undefined).then(() => {
+      layout();
+      wrap.classList.add('is-live');
+      new IntersectionObserver(([e]) => {
+        visible = !!e?.isIntersecting;
+        if (visible) { last = performance.now(); schedule(); }
+      }, { rootMargin: '100px' }).observe(wrap);
+      let rt = 0;
+      addEventListener('resize', () => { clearTimeout(rt); rt = window.setTimeout(() => { layout(); schedule(); }, 150); });
+    });
+  }
+</script>
+
+<style>
+  .site-footer { position: relative; overflow: hidden; background: var(--night); color: var(--text-2); border-top: 1px solid var(--line); }
+  .inner { display: grid; gap: 32px; padding-block: 64px 24px; }
+  .about { display: grid; gap: 10px; max-width: 520px; }
+  .tagline { font-family: var(--display); font-size: var(--fs-m); font-weight: 600; font-stretch: 90%; color: var(--text); }
+  .sdg { font-size: 14px; color: var(--emerald); }
+  .links ul { display: grid; gap: 2px; list-style: none; margin: 0; padding: 0; }
+  .links a { display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); font-size: 15px; color: var(--text); text-decoration: none; }
+  .links a:hover { color: var(--cyan); }
+  .links code { color: var(--cyan); }
+
+  .leadership {
+    display: grid;
+    gap: 10px;
+    padding-block: 18px 20px;
+    border-top: 1px solid var(--line);
+  }
+  .leadership-title {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #00F0FF;
+  }
+  .leadership-list {
+    display: grid;
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .leadership-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 8px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-2);
+  }
+  .leadership-label { color: var(--text-2); }
+  .leadership-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .leadership-sep { color: var(--text-3); }
+  .leadership-link { color: #00F0FF; text-decoration: none; }
+  .leadership-link:hover { text-decoration: underline; }
+  .leadership-code {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #00F0FF;
+  }
+
+  .giant { position: relative; padding-block: 24px 8px; cursor: crosshair; user-select: none; }
+  .giant-svg { width: 100%; height: auto; overflow: visible; }
+  .giant-svg text {
+    font-family: var(--display);
+    font-weight: 800;
+    font-stretch: 125%;
+    fill: none;
+    stroke: rgb(0 240 255 / 0.4);
+    stroke-width: 1.2;
+    vector-effect: non-scaling-stroke;
+  }
+  .giant-canvas { display: none; }
+  .giant.is-live .giant-svg { display: none; }
+  .giant.is-live .giant-canvas { display: block; }
+
+  .imprint {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 18px 28px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-3);
+  }
+  @media (min-width: 768px) {
+    .inner { grid-template-columns: 1fr auto; align-items: start; }
+    .links ul { justify-items: end; }
+  }
+</style>

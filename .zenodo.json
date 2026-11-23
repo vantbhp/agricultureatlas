@@ -1,0 +1,53 @@
+{
+  "title": "Agriculture Atlas: Zero-IoT Virtual Agro-Sensor Twins and Offline Zero-Literacy Agronomic Reference Systems for Climate-Vulnerable Smallholder Farming",
+  "description": "Agriculture Atlas is a 100% non-commercial, open-science reference agronomic atlas aligned with UN SDG #2 (Zero Hunger) and UN SDG #13 (Climate Action). It combines deterministic FAO-56 Penman-Monteith agro-physics, seven Virtual Agro-Sensor Twin reference indices over Uber H3 (Res-7/Res-8) and Overture Maps land-use geometries, an MIT/Apache-2.0 four-SKU foundation model architecture designed for Microsoft Azure NVIDIA GPUs and NVIDIA Brev (Aurora, cBottle-SR, FourCastNet 3, TerraMind-1.0, THOR-1.0, Qwen3.8-27B NVFP4, Qwen3-ASR, VieNeu-TTS-v3, MobileNetV4-Small, Gemma-4-E2B, Qwen3.5-0.8B), sub-5 KB zlib-compressed offline delta packets, and zero-literacy voice-and-pictogram mobile UX for smallholder farmers starting with a five-zone Vietnam pilot.",
+  "upload_type": "software",
+  "version": "1.0.0",
+  "publication_date": "2026-11-23",
+  "access_right": "open",
+  "license": "Apache-2.0",
+  "language": "eng",
+  "creators": [
+    {
+      "name": "Le, Van (Lê Thành Văn)",
+      "affiliation": "Agriculture Atlas Open-Science Initiative",
+      "orcid": "0009-0005-3514-106X"
+    }
+  ],
+  "keywords": [
+    "Agriculture Atlas",
+    "Open Science",
+    "Agro-Climatology",
+    "FAO-56 Penman-Monteith",
+    "Virtual Agro-Sensor Twin",
+    "Uber H3",
+    "Overture Maps",
+    "Microsoft Aurora",
+    "NVIDIA Earth-2",
+    "TerraMind",
+    "THOR",
+    "Zero-Literacy HCI",
+    "Smallholder Agriculture",
+    "Vietnam",
+    "UN SDG 2",
+    "UN SDG 13"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://agricultureatlas.org",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/vantbhp/agricultureatlas",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://orcid.org/0009-0005-3514-106X",
+      "relation": "isCompiledBy",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Software licensed under Apache-2.0; Technical Report (docs/technical-report/AGRICULTURE_ATLAS_TECHNICAL_REPORT_V1.md) and original reference documentation licensed under CC-BY-4.0. Outputs are reference agronomic indices only and not official hydrometeorological forecasts or statutory disaster warnings."
+}

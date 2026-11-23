@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <pattern id="st" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(18)"><circle cx="3" cy="3" r="2.2" fill="#00F0FF"/></pattern>
+    <pattern id="ht" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="9" stroke="#10B981" stroke-width="4"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#F3EEE3"/>
+  <g fill="none" stroke="#15181D" stroke-width="1.2" opacity="0.5">
+    <ellipse cx="900" cy="230" rx="60" ry="40"/><ellipse cx="900" cy="230" rx="110" ry="74"/><ellipse cx="900" cy="230" rx="160" ry="108"/><ellipse cx="900" cy="230" rx="210" ry="142"/><ellipse cx="900" cy="230" rx="260" ry="176"/><ellipse cx="900" cy="230" rx="310" ry="210"/>
+  </g>
+  <path d="M560 520 C700 430 820 560 980 470 S1180 420 1240 460" fill="none" stroke="#00F0FF" stroke-width="26" stroke-linecap="round" style="mix-blend-mode:multiply"/>
+  <g style="mix-blend-mode:multiply">
+    <polygon points="900,300 952,330 952,390 900,420 848,390 848,330" fill="url(#st)"/>
+    <polygon points="1004,300 1056,330 1056,390 1004,420 952,390 952,330" fill="url(#ht)"/>
+    <polygon points="952,210 1004,240 1004,300 952,330 900,300 900,240" fill="url(#ht)"/>
+  </g>
+  <g fill="none" stroke="#15181D" stroke-width="2"><polygon points="900,300 952,330 952,390 900,420 848,390 848,330"/><polygon points="1004,300 1056,330 1056,390 1004,420 952,390 952,330"/><polygon points="952,210 1004,240 1004,300 952,330 900,300 900,240"/></g>
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#15181D" stroke-width="3"/>
+  <rect x="28" y="28" width="1144" height="574" fill="none" stroke="#15181D" stroke-width="1"/>
+  <text x="96" y="250" font-family="Iowan Old Style, Palatino, Georgia, serif" font-style="italic" font-weight="600" font-size="76" fill="#15181D">Agriculture Atlas</text>
+  <text x="100" y="310" font-family="Iowan Old Style, Palatino, Georgia, serif" font-style="italic" font-size="34" fill="#464B53">Reference agronomic indices from open data,</text>
+  <text x="100" y="354" font-family="Iowan Old Style, Palatino, Georgia, serif" font-style="italic" font-size="34" fill="#464B53">no sensors to buy.</text>
+  <text x="100" y="540" font-family="Menlo, monospace" font-size="22" letter-spacing="3" fill="#737881">AGRICULTUREATLAS.ORG · NON-PROFIT · UN SDG 2 &amp; 13</text>
+</svg>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ResearchView from '../components/ResearchView.astro';
+import { t } from '../i18n/ui';
+import type { Lang } from '../i18n/types';
+
+const lang: Lang = 'en';
+---
+
+<BaseLayout
+  lang={lang}
+  title={t(lang, 'research.meta.title')}
+  description={t(lang, 'research.meta.description')}
+  path="/research"
+>
+  <ResearchView lang={lang} />
+</BaseLayout>

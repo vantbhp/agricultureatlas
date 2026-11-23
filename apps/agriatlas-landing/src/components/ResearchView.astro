@@ -1,0 +1,731 @@
+---
+import { t } from '../i18n/ui';
+import {
+  CONTACT_EMAIL,
+  GITHUB_URL,
+  GRANTS_EMAIL,
+  PI_EMAIL,
+  PI_NAME,
+  PI_ORCID_ID,
+  PI_ORCID_URL,
+  RESEARCH_EMAIL,
+  SITE_URL,
+  chatUrl,
+  localePath,
+  type DictKey,
+  type Lang,
+} from '../i18n/types';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const assistantHref = chatUrl(lang);
+const homeHref = localePath('/', lang);
+const citationCffUrl = `${GITHUB_URL}/blob/main/CITATION.cff`;
+const riceDatasetUrl = 'https://huggingface.co/datasets/minhhungg/rice-disease-dataset';
+
+const rqs: { id: string; tag: DictKey; title: DictKey; body: DictKey }[] = [
+  { id: 'RQ1', tag: 'research.rq1.tag', title: 'research.rq1.title', body: 'research.rq1.body' },
+  { id: 'RQ2', tag: 'research.rq2.tag', title: 'research.rq2.title', body: 'research.rq2.body' },
+  { id: 'RQ3', tag: 'research.rq3.tag', title: 'research.rq3.title', body: 'research.rq3.body' },
+  { id: 'RQ4', tag: 'research.rq4.tag', title: 'research.rq4.title', body: 'research.rq4.body' },
+];
+
+const skus: {
+  code: string;
+  role: DictKey;
+  body: DictKey;
+  license: string;
+  models: string[];
+  accent: string;
+}[] = [
+  {
+    code: 'AA-SKU-1',
+    role: 'research.sku1.role',
+    body: 'research.sku1.body',
+    license: 'MIT · Apache-2.0',
+    models: [
+      'microsoft/aurora (v1.5 / 0.1° / Wave / Air Pollution · Nature 2025)',
+      'nvidia/cbottle',
+      'nvidia/fourcastnet3',
+    ],
+    accent: 'var(--cyan)',
+  },
+  {
+    code: 'AA-SKU-2',
+    role: 'research.sku2.role',
+    body: 'research.sku2.body',
+    license: 'Apache-2.0 · Open EO',
+    models: [
+      'TerraMind-1.0-base',
+      'THOR-1.0-base',
+      'Microsoft Planetary Computer STAC · Google Earth Engine (Non-Commercial)',
+    ],
+    accent: 'var(--emerald)',
+  },
+  {
+    code: 'AA-SKU-3',
+    role: 'research.sku3.role',
+    body: 'research.sku3.body',
+    license: 'Apache-2.0 · Open Weights',
+    models: [
+      'Qwen/Qwen3.8-27B / nvidia/Qwen3.8-27B-NVFP4',
+      'Qwen3.6-35B-A3B',
+      'Qwen3-ASR-1.7B · VieNeu-TTS-v3-Turbo',
+    ],
+    accent: 'var(--gold)',
+  },
+  {
+    code: 'AA-SKU-4',
+    role: 'research.sku4.role',
+    body: 'research.sku4.body',
+    license: 'Apache-2.0 / Gemma Terms',
+    models: [
+      'MobileNetV4',
+      'VieNeu-TTS-v3-Nano',
+      'Gemma-4-E2B-it / Qwen3.5-0.8B (<5 KB H3 edge packet)',
+    ],
+    accent: 'var(--amber)',
+  },
+];
+
+const fairItems: { letter: string; title: DictKey; body: DictKey }[] = [
+  { letter: 'F', title: 'research.fair.f.title', body: 'research.fair.f.body' },
+  { letter: 'A', title: 'research.fair.a.title', body: 'research.fair.a.body' },
+  { letter: 'I', title: 'research.fair.i.title', body: 'research.fair.i.body' },
+  { letter: 'R', title: 'research.fair.r.title', body: 'research.fair.r.body' },
+];
+
+const bibtex = [
+  '@software{le2026agricultureatlas,',
+  `  author       = {${PI_NAME}},`,
+  `  orcid        = {${PI_ORCID_URL}},`,
+  '  title        = {{Agriculture Atlas}: Open-Science Zero-IoT Virtual Sensing for Reference Agronomic Indices},',
+  '  year         = {2026},',
+  '  month        = nov,',
+  `  url          = {${SITE_URL}/research/},`,
+  `  code         = {${GITHUB_URL}},`,
+  '  note         = {Zenodo DOI pending Phase 1 archival deposit; non-commercial open science}',
+  '}',
+].join('\n');
+---
+
+<article class="research-page">
+  <!-- HERO -->
+  <header class="r-hero">
+    <div class="container r-hero-inner">
+      <p class="eyebrow">{t(lang, 'research.eyebrow')}</p>
+      <h1>{t(lang, 'research.title')}</h1>
+      <p class="r-lead">{t(lang, 'research.lead')}</p>
+      <div class="disclaimer-box" role="note">
+        <span class="dot" aria-hidden="true"></span>
+        <p>{t(lang, 'research.disclaimer')}</p>
+      </div>
+      <div class="r-ctas">
+        <a class="btn btn-primary" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+          {t(lang, 'research.cta_github')} <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="btn btn-ghost" href={assistantHref} rel="noopener">
+          {t(lang, 'research.cta_chat')}
+        </a>
+        <a class="btn btn-ghost" href={homeHref}>
+          <span aria-hidden="true">←</span> {t(lang, 'research.cta_back')}
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- RQ1-RQ4 -->
+  <section id="research-questions" class="r-section" aria-labelledby="rq-title">
+    <div class="container">
+      <div class="sec-head">
+        <h2 id="rq-title">{t(lang, 'research.rq.title')}</h2>
+        <p>{t(lang, 'research.rq.lead')}</p>
+      </div>
+      <ol class="rq-grid" role="list">
+        {
+          rqs.map((rq) => (
+            <li class="card rq-card">
+              <div class="card-top">
+                <code class="sku-tag">{rq.id}</code>
+                <span class="card-meta">{t(lang, rq.tag)}</span>
+              </div>
+              <h3>{t(lang, rq.title)}</h3>
+              <p>{t(lang, rq.body)}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4-SKU GOLDEN ARCHITECTURE -->
+  <section id="architecture" class="r-section r-section-alt" aria-labelledby="stack-title">
+    <div class="container">
+      <div class="sec-head">
+        <h2 id="stack-title">{t(lang, 'research.stack.title')}</h2>
+        <p>{t(lang, 'research.stack.lead')}</p>
+        <p class="compute-pill">{t(lang, 'research.stack.compute')}</p>
+      </div>
+      <div class="sku-grid">
+        {
+          skus.map((sku) => (
+            <section class="card sku-card" style={`--accent: ${sku.accent}`}>
+              <div class="card-top">
+                <code class="sku-tag sku-tag-accent">{sku.code}</code>
+                <span class="license-chip">{sku.license}</span>
+              </div>
+              <h3>{t(lang, sku.role)}</h3>
+              <p class="sku-body">{t(lang, sku.body)}</p>
+              <ul class="model-list" role="list">
+                {sku.models.map((m) => <li><code>{m}</code></li>)}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+      <div class="xval-callout">
+        <h3>{t(lang, 'research.xval.title')}</h3>
+        <p>{t(lang, 'research.xval.body')}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CITATION, ZENODO, OSF & VERIFIED OPEN DATASETS -->
+  <section id="citation" class="r-section" aria-labelledby="citation-title">
+    <div class="container">
+      <div class="sec-head">
+        <h2 id="citation-title">{t(lang, 'research.citation.title')}</h2>
+        <p>{t(lang, 'research.citation.lead')}</p>
+      </div>
+      <div class="citation-grid">
+        <div class="card citation-meta">
+          <dl class="meta-list">
+            <div>
+              <dt>{t(lang, 'research.citation.repo_label')}</dt>
+              <dd>
+                <a class="text-link" href={GITHUB_URL} target="_blank" rel="noopener noreferrer"><code>{GITHUB_URL}</code></a>
+                <span class="sep" aria-hidden="true">·</span>
+                <a class="text-link" href={citationCffUrl} target="_blank" rel="noopener noreferrer"><code>CITATION.cff</code></a>
+              </dd>
+            </div>
+            <div>
+              <dt>{t(lang, 'research.citation.zenodo_label')}</dt>
+              <dd>{t(lang, 'research.citation.zenodo_status')}</dd>
+            </div>
+            <div>
+              <dt>{t(lang, 'research.citation.osf_label')}</dt>
+              <dd>{t(lang, 'research.citation.osf_status')}</dd>
+            </div>
+            <div>
+              <dt>{t(lang, 'research.citation.dataset_label')}</dt>
+              <dd>
+                <a class="text-link" href={riceDatasetUrl} target="_blank" rel="noopener noreferrer">
+                  <code>minhhungg/rice-disease-dataset</code>
+                </a>
+                <span class="sep" aria-hidden="true">·</span>
+                <code>DOI: 10.57967/hf/8245</code>
+                <p class="dataset-desc">{t(lang, 'research.citation.dataset_body')}</p>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="card bibtex-card">
+          <div class="card-top">
+            <h3>{t(lang, 'research.citation.bibtex_label')}</h3>
+            <code class="sku-tag">BibTeX</code>
+          </div>
+          <pre class="bibtex-pre"><code>{bibtex}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAIR DATA MANAGEMENT PLAN -->
+  <section id="fair-dmp" class="r-section r-section-alt" aria-labelledby="fair-title">
+    <div class="container">
+      <div class="sec-head">
+        <h2 id="fair-title">{t(lang, 'research.fair.title')}</h2>
+        <p>{t(lang, 'research.fair.lead')}</p>
+      </div>
+      <div class="fair-grid">
+        {
+          fairItems.map((item) => (
+            <div class="card fair-card">
+              <span class="fair-letter" aria-hidden="true">{item.letter}</span>
+              <h3>{t(lang, item.title)}</h3>
+              <p>{t(lang, item.body)}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- HONEST IMPLEMENTATION STATUS -->
+  <section id="status" class="r-section" aria-labelledby="status-title">
+    <div class="container">
+      <div class="sec-head">
+        <h2 id="status-title">{t(lang, 'research.status.title')}</h2>
+        <p>{t(lang, 'research.status.lead')}</p>
+      </div>
+      <div class="status-grid">
+        <div class="card status-card status-done">
+          <span class="status-pill status-pill-done">{t(lang, 'research.status.done_label')}</span>
+          <ul class="status-list">
+            <li>{t(lang, 'research.status.done_1')}</li>
+            <li>{t(lang, 'research.status.done_2')}</li>
+            <li>{t(lang, 'research.status.done_3')}</li>
+          </ul>
+        </div>
+        <div class="card status-card status-pending">
+          <span class="status-pill status-pill-pending">{t(lang, 'research.status.pending_label')}</span>
+          <ul class="status-list">
+            <li>{t(lang, 'research.status.pending_1')}</li>
+            <li>{t(lang, 'research.status.pending_2')}</li>
+            <li>{t(lang, 'research.status.pending_3')}</li>
+          </ul>
+        </div>
+      </div>
+      <p class="status-note">{t(lang, 'research.status.note')}</p>
+    </div>
+  </section>
+
+  <!-- PRINCIPAL INVESTIGATOR & GRANT GOVERNANCE -->
+  <section id="governance" class="r-section r-section-alt" aria-labelledby="gov-title">
+    <div class="container">
+      <div class="gov-grid">
+        <div class="sec-head">
+          <h2 id="gov-title">{t(lang, 'research.gov.title')}</h2>
+          <p>{t(lang, 'research.gov.lead')}</p>
+          <p class="gov-note">{t(lang, 'research.gov.license_note')}</p>
+        </div>
+        <div class="card gov-card">
+          <dl class="meta-list">
+            <div>
+              <dt>{t(lang, 'research.gov.pi_label')}</dt>
+              <dd class="gov-name">{PI_NAME}</dd>
+            </div>
+            <div>
+              <dt>{t(lang, 'research.gov.orcid_label')}</dt>
+              <dd>
+                <a class="text-link" href={PI_ORCID_URL} target="_blank" rel="noopener noreferrer">
+                  <code>{PI_ORCID_URL} ({PI_ORCID_ID})</code>
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt>{t(lang, 'research.gov.contacts_label')}</dt>
+              <dd class="email-stack">
+                <a class="text-link" href={`mailto:${PI_EMAIL}`}><code>{PI_EMAIL}</code></a>
+                <a class="text-link" href={`mailto:${RESEARCH_EMAIL}`}><code>{RESEARCH_EMAIL}</code></a>
+                <a class="text-link" href={`mailto:${GRANTS_EMAIL}`}><code>{GRANTS_EMAIL}</code></a>
+                <a class="text-link" href={`mailto:${CONTACT_EMAIL}`}><code>{CONTACT_EMAIL}</code></a>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+</article>
+
+<style>
+  .research-page {
+    padding-top: 68px;
+  }
+
+  .r-hero {
+    padding-block: clamp(64px, 8vw, 112px) clamp(56px, 7vw, 88px);
+    background:
+      radial-gradient(90% 70% at 15% 0%, rgb(0 240 255 / 0.1), transparent 60%),
+      radial-gradient(80% 60% at 90% 20%, rgb(16 185 129 / 0.08), transparent 60%),
+      var(--night);
+    border-bottom: 1px solid var(--line);
+  }
+  .r-hero-inner {
+    display: grid;
+    gap: 20px;
+    max-width: 1020px;
+  }
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .r-hero h1 {
+    font-size: var(--fs-xl);
+    line-height: 1.06;
+  }
+  .r-lead {
+    max-width: 66ch;
+    font-size: clamp(16px, 1.25vw, 19px);
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .disclaimer-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 68ch;
+    padding: 14px 18px;
+    background: rgb(217 178 76 / 0.08);
+    border: 1px solid rgb(217 178 76 / 0.35);
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .disclaimer-box .dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-top: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+  .r-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .r-section {
+    padding-block: clamp(56px, 7vw, 96px);
+    border-bottom: 1px solid var(--line);
+  }
+  .r-section-alt {
+    background: var(--night-2);
+  }
+  .sec-head {
+    display: grid;
+    gap: 14px;
+    max-width: 68ch;
+    margin-bottom: 36px;
+  }
+  .sec-head h2 {
+    font-size: clamp(24px, 3vw, 42px);
+    line-height: 1.12;
+  }
+  .sec-head p {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .compute-pill {
+    justify-self: start;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cyan);
+    background: rgb(0 240 255 / 0.08);
+    border: 1px solid rgb(0 240 255 / 0.28);
+    border-radius: 999px;
+  }
+
+  .card {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: 24px;
+    background: var(--night-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .r-section-alt .card {
+    background: var(--night);
+  }
+  .card-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 12px;
+  }
+  .sku-tag {
+    padding: 3px 9px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cyan);
+    background: rgb(0 240 255 / 0.1);
+    border-radius: 6px;
+  }
+  .sku-tag-accent {
+    color: var(--accent, var(--cyan));
+    background: rgb(238 243 240 / 0.07);
+    border: 1px solid var(--line-strong);
+  }
+  .card-meta {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-3);
+  }
+  .license-chip {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+
+  /* RQ grid */
+  .rq-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .rq-card h3 {
+    font-size: 20px;
+    font-stretch: 92%;
+    line-height: 1.25;
+  }
+  .rq-card p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  @media (min-width: 768px) {
+    .rq-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* 4-SKU grid */
+  .sku-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .sku-card {
+    border-top: 2px solid var(--accent, var(--cyan));
+  }
+  .sku-card h3 {
+    font-size: 20px;
+    font-stretch: 92%;
+    line-height: 1.25;
+  }
+  .sku-body {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .model-list {
+    display: grid;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
+  .model-list li {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .model-list code {
+    font-size: 12.5px;
+    color: var(--text);
+    word-break: break-word;
+  }
+  @media (min-width: 768px) {
+    .sku-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .xval-callout {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: var(--night-3);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--cyan);
+    border-radius: 8px;
+    display: grid;
+    gap: 8px;
+  }
+  .xval-callout h3 {
+    font-size: 17px;
+    font-stretch: 94%;
+  }
+  .xval-callout p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  /* Citation */
+  .citation-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .meta-list {
+    display: grid;
+    gap: 18px;
+    margin: 0;
+  }
+  .meta-list dt {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-3);
+    margin-bottom: 4px;
+  }
+  .meta-list dd {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--text-2);
+    word-break: break-word;
+  }
+  .dataset-desc {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--text-2);
+  }
+  .sep {
+    margin-inline: 6px;
+    color: var(--text-3);
+  }
+  .text-link {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .text-link:hover {
+    text-decoration: underline;
+  }
+  .bibtex-card h3 {
+    font-size: 18px;
+    font-stretch: 92%;
+  }
+  .bibtex-pre {
+    margin: 0;
+    padding: 16px;
+    overflow-x: auto;
+    background: var(--night);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .bibtex-pre code {
+    font-size: 12.5px;
+  }
+  @media (min-width: 1024px) {
+    .citation-grid {
+      grid-template-columns: 6fr 5fr;
+      align-items: start;
+    }
+  }
+
+  /* FAIR */
+  .fair-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .fair-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-family: var(--display);
+    font-size: 20px;
+    font-weight: 700;
+    color: #04161A;
+    background: var(--cyan);
+    border-radius: 8px;
+  }
+  .fair-card h3 {
+    font-size: 19px;
+    font-stretch: 92%;
+  }
+  .fair-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  @media (min-width: 640px) {
+    .fair-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1200px) {
+    .fair-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* Status */
+  .status-grid {
+    display: grid;
+    gap: 20px;
+  }
+  .status-pill {
+    justify-self: start;
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 999px;
+  }
+  .status-pill-done {
+    color: var(--emerald);
+    background: rgb(16 185 129 / 0.12);
+    border: 1px solid rgb(16 185 129 / 0.35);
+  }
+  .status-pill-pending {
+    color: var(--amber);
+    background: rgb(245 158 11 / 0.12);
+    border: 1px solid rgb(245 158 11 / 0.35);
+  }
+  .status-list {
+    display: grid;
+    gap: 12px;
+    padding-left: 18px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+  .status-note {
+    margin-top: 20px;
+    padding: 14px 18px;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+    background: var(--night-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  @media (min-width: 768px) {
+    .status-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Governance */
+  .gov-grid {
+    display: grid;
+    gap: 28px;
+  }
+  .gov-grid .sec-head {
+    margin-bottom: 0;
+  }
+  .gov-note {
+    font-size: 14px;
+    color: var(--text-3);
+  }
+  .gov-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .email-stack {
+    display: grid;
+    gap: 6px;
+  }
+  @media (min-width: 1024px) {
+    .gov-grid {
+      grid-template-columns: 5fr 6fr;
+      align-items: start;
+      gap: 56px;
+    }
+  }
+</style>

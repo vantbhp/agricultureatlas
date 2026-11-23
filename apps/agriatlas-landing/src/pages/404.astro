@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t } from '../i18n/ui';
+import type { Lang } from '../i18n/types';
+
+const lang: Lang = 'en';
+---
+
+<BaseLayout lang={lang} title={`${t(lang, 'notfound.title')} — Agriculture Atlas`} description={t(lang, 'notfound.body')} path="/404">
+  <section class="notfound container">
+    <p class="code" aria-hidden="true">404</p>
+    <h1>{t(lang, 'notfound.title')}</h1>
+    <p class="body">{t(lang, 'notfound.body')}</p>
+    <a class="btn btn-primary" href="/">{t(lang, 'notfound.cta')} <span class="arrow" aria-hidden="true">→</span></a>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound { display: grid; justify-items: start; gap: 20px; min-height: 80dvh; align-content: center; padding-block: 140px 80px; }
+  .code { font-family: var(--display); font-size: clamp(96px, 22vw, 280px); font-weight: 800; font-stretch: 130%; line-height: 0.85; color: transparent; -webkit-text-stroke: 1.5px var(--cyan); }
+  .notfound h1 { font-size: var(--fs-xl); }
+  .body { max-width: 46ch; color: var(--text-2); }
+</style>

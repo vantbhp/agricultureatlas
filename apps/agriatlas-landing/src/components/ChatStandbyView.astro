@@ -1,0 +1,254 @@
+---
+import { t } from '../i18n/ui';
+import { CONTACT_EMAIL, localePath, type DictKey, type Lang } from '../i18n/types';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const isVi = lang === 'vi';
+
+const copy = isVi
+  ? {
+      badge: 'Đang hiệu chuẩn mô hình · Dữ liệu mẫu',
+      title: 'Trợ lý & Bản đồ lưới H3',
+      lead: 'Không gian tra cứu chỉ số nông học tham khảo theo từng ô lưới lục giác H3 đang trong giai đoạn hiệu chuẩn trước khi mở công khai. Bạn có thể xem trước cấu trúc 7 chỉ số tham khảo theo 4 vùng sinh thái nông nghiệp thí điểm bên dưới.',
+      note: 'Chỉ số nông học chỉ mang tính tham khảo từ công thức FAO-56 và dữ liệu mở, không phải bản tin dự báo hay cảnh báo chính thức.',
+      regionLabel: 'Chọn vùng sinh thái nông nghiệp thí điểm',
+      cellLabel: 'Ô lưới H3 mẫu',
+      indicesLabel: '7 chỉ số nông học tham khảo trên mỗi ô H3',
+      promptLabel: 'Thử đặt câu hỏi tham khảo theo vùng',
+      promptPlaceholder: 'Ví dụ: Độ ẩm đất vùng rễ và ET0 tham khảo tại ô H3 này có ý nghĩa gì?',
+      promptSend: 'Kiểm tra trạng thái',
+      standbyNotice:
+        'Cụm suy luận trực tiếp đang trong giai đoạn hiệu chuẩn mô hình. Để nhận quyền truy cập thử nghiệm cho viện nghiên cứu, hợp tác xã hoặc dự án công ích, vui lòng liên hệ qua email.',
+      ctaPartner: 'Đăng ký thử nghiệm qua email',
+      ctaHome: 'Về trang chủ',
+    }
+  : {
+      badge: 'Model calibration in progress · Sample data',
+      title: 'H3 Atlas & Reference Assistant',
+      lead: 'The interactive H3 hexagonal workspace for reference agronomic indices is currently in pre-release calibration. Explore the structure of the 7 reference indices across our 4 pilot agro-ecological regions below.',
+      note: 'Agronomic indices are for reference only, derived from FAO-56 formulas and open data. Not weather forecasts or official warnings.',
+      regionLabel: 'Select a pilot agro-ecological region',
+      cellLabel: 'Sample H3 cell',
+      indicesLabel: '7 reference agronomic indices per H3 cell',
+      promptLabel: 'Preview a regional reference query',
+      promptPlaceholder: 'Example: How are root-zone soil moisture and ET0 reference indices defined for this H3 cell?',
+      promptSend: 'Check status',
+      standbyNotice:
+        'Live model inference is currently in pre-release calibration. Research institutes, cooperatives and public-good partners can request early pilot access by email.',
+      ctaPartner: 'Request pilot access by email',
+      ctaHome: 'Back to home',
+    };
+
+const regions: {
+  id: 'mekong' | 'highlands' | 'red_river' | 'central_coast';
+  h3: string;
+  coords: string;
+  nameKey: DictKey;
+  descKey: DictKey;
+}[] = [
+  { id: 'mekong', h3: '8765b566affffff', coords: '10.03°N · 105.78°E', nameKey: 'regions.mekong.name', descKey: 'regions.mekong.desc' },
+  { id: 'highlands', h3: '8765824adffffff', coords: '12.67°N · 108.04°E', nameKey: 'regions.highlands.name', descKey: 'regions.highlands.desc' },
+  { id: 'red_river', h3: '87411c292ffffff', coords: '20.95°N · 106.33°E', nameKey: 'regions.red_river.name', descKey: 'regions.red_river.desc' },
+  { id: 'central_coast', h3: '876596314ffffff', coords: '13.78°N · 109.22°E', nameKey: 'regions.central_coast.name', descKey: 'regions.central_coast.desc' },
+];
+
+const indices: { field: string; nameKey: DictKey; descKey: DictKey; unit: string }[] = [
+  { field: 'soil_moisture_root_zone', nameKey: 'indices.soil_moisture.name', descKey: 'indices.soil_moisture.desc', unit: 'm³/m³ (ref)' },
+  { field: 'et0_mm_day', nameKey: 'indices.et0.name', descKey: 'indices.et0.desc', unit: 'mm/day (FAO-56)' },
+  { field: 'gdd_accumulated', nameKey: 'indices.gdd.name', descKey: 'indices.gdd.desc', unit: '°C·day (ref)' },
+  { field: 'salinity_risk_index', nameKey: 'indices.salinity.name', descKey: 'indices.salinity.desc', unit: '0–1 scale (ref)' },
+  { field: 'frost_risk_index', nameKey: 'indices.frost.name', descKey: 'indices.frost.desc', unit: '0–1 scale (ref)' },
+  { field: 'leaf_wetness_hours', nameKey: 'indices.leaf_wetness.name', descKey: 'indices.leaf_wetness.desc', unit: 'hours (ref)' },
+  { field: 'crop_stress_gravity_score', nameKey: 'indices.crop_stress.name', descKey: 'indices.crop_stress.desc', unit: '3-colour band' },
+];
+---
+
+<section class="standby container" aria-labelledby="standby-title">
+  <header class="head">
+    <p class="status-pill"><span class="dot" aria-hidden="true"></span>{copy.badge}</p>
+    <h1 id="standby-title">{copy.title}</h1>
+    <p class="lead">{copy.lead}</p>
+    <p class="disclaimer">{copy.note}</p>
+  </header>
+
+  <div class="workspace">
+    <div class="region-pane">
+      <h2 class="pane-title">{copy.regionLabel}</h2>
+      <ul class="region-tabs" role="list">
+        {
+          regions.map((r, idx) => (
+            <li>
+              <button
+                type="button"
+                class="region-btn"
+                data-region-btn={r.id}
+                data-h3={r.h3}
+                data-coords={r.coords}
+                data-desc={t(lang, r.descKey)}
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+              >
+                <span class="r-name">{t(lang, r.nameKey)}</span>
+                <span class="r-meta"><code>{r.h3}</code> · {r.coords}</span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="cell-summary" data-cell-summary>
+        <div class="cell-header">
+          <span class="cell-label">{copy.cellLabel}</span>
+          <code class="cell-id" data-cell-id>{regions[0].h3}</code>
+          <span class="cell-coords" data-cell-coords>{regions[0].coords}</span>
+        </div>
+        <p class="cell-desc" data-cell-desc>{t(lang, regions[0].descKey)}</p>
+      </div>
+
+      <form class="query-box" data-standby-form novalidate>
+        <label class="pane-title" for="standby-input">{copy.promptLabel}</label>
+        <div class="query-row">
+          <input id="standby-input" type="text" placeholder={copy.promptPlaceholder} autocomplete="off" />
+          <button type="submit" class="btn btn-primary">{copy.promptSend}</button>
+        </div>
+        <p class="standby-msg" data-standby-msg>{copy.standbyNotice}</p>
+      </form>
+
+      <div class="actions">
+        <a class="btn btn-primary" href={`mailto:${CONTACT_EMAIL}?subject=Early%20Pilot%20Access%20-%20Agriculture%20Atlas`}>
+          {copy.ctaPartner} <span class="arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="btn btn-ghost" href={localePath('/', lang)}>{copy.ctaHome}</a>
+      </div>
+    </div>
+
+    <div class="indices-pane">
+      <h2 class="pane-title">{copy.indicesLabel}</h2>
+      <ul class="indices-grid" role="list">
+        {
+          indices.map((item) => (
+            <li class="index-row">
+              <div class="index-top">
+                <span class="index-title">{t(lang, item.nameKey)}</span>
+                <code class="index-unit">{item.unit}</code>
+              </div>
+              <p class="index-desc">{t(lang, item.descKey)}</p>
+              <code class="index-key">{item.field}</code>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  const btns = [...document.querySelectorAll<HTMLButtonElement>('[data-region-btn]')];
+  const cellId = document.querySelector<HTMLElement>('[data-cell-id]');
+  const cellCoords = document.querySelector<HTMLElement>('[data-cell-coords]');
+  const cellDesc = document.querySelector<HTMLElement>('[data-cell-desc]');
+  const form = document.querySelector<HTMLFormElement>('[data-standby-form]');
+  const msg = document.querySelector<HTMLElement>('[data-standby-msg]');
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      btns.forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+      if (cellId) cellId.textContent = btn.dataset.h3 ?? '';
+      if (cellCoords) cellCoords.textContent = btn.dataset.coords ?? '';
+      if (cellDesc) cellDesc.textContent = btn.dataset.desc ?? '';
+    });
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    msg?.classList.add('active');
+  });
+</script>
+
+<style>
+  .standby { padding-block: 120px 80px; display: grid; gap: 48px; }
+  .head { max-width: 780px; display: grid; gap: 16px; }
+  .status-pill {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--cyan);
+    background: rgb(0 240 255 / 0.08);
+    border: 1px solid rgb(0 240 255 / 0.28);
+    border-radius: 999px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); }
+  .head h1 { font-size: var(--fs-xl); }
+  .lead { color: var(--text-2); max-width: 64ch; }
+  .disclaimer { font-size: 14px; color: var(--gold); max-width: 64ch; }
+
+  .workspace { display: grid; gap: 40px; align-items: start; }
+  .pane-title { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.04em; color: var(--text-3); margin-bottom: 14px; }
+  .region-pane { display: grid; gap: 24px; }
+  .region-tabs { display: grid; gap: 8px; list-style: none; margin: 0; padding: 0; }
+  .region-btn {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding: 16px 18px;
+    text-align: left;
+    font: inherit;
+    color: var(--text-2);
+    background: var(--night-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 200ms var(--ease), color 200ms var(--ease);
+  }
+  .region-btn:hover, .region-btn[aria-pressed='true'] { color: var(--text); border-color: var(--cyan); }
+  .r-name { font-family: var(--display); font-size: 18px; font-weight: 600; }
+  .r-meta { font-family: var(--mono); font-size: 12.5px; color: var(--text-3); }
+
+  .cell-summary { padding: 20px; background: var(--night-2); border: 1px solid var(--line); border-radius: 8px; display: grid; gap: 10px; }
+  .cell-header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; font-family: var(--mono); font-size: 13px; }
+  .cell-label { color: var(--text-3); }
+  .cell-id { color: var(--cyan); }
+  .cell-coords { color: var(--emerald); }
+  .cell-desc { font-size: 15px; color: var(--text-2); }
+
+  .query-box { padding: 20px; background: var(--night-2); border: 1px solid var(--line); border-radius: 8px; display: grid; gap: 12px; }
+  .query-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .query-row input {
+    flex: 1 1 240px;
+    min-height: 44px;
+    padding: 0 14px;
+    font: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--night);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+  }
+  .query-row input:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+  .standby-msg { font-size: 14px; color: var(--text-2); line-height: 1.5; }
+  .standby-msg.active { color: var(--cyan); }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .indices-grid { display: grid; gap: 10px; list-style: none; margin: 0; padding: 0; }
+  .index-row { padding: 16px 18px; background: var(--night-2); border: 1px solid var(--line); border-radius: 8px; display: grid; gap: 6px; }
+  .index-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .index-title { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--text); }
+  .index-unit { font-family: var(--mono); font-size: 12px; color: var(--emerald); }
+  .index-desc { font-size: 14px; color: var(--text-2); }
+  .index-key { font-family: var(--mono); font-size: 12px; color: var(--text-3); }
+
+  @media (min-width: 1024px) {
+    .workspace { grid-template-columns: 6fr 5fr; gap: 48px; }
+  }
+</style>

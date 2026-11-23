@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChatStandbyView from '../../components/ChatStandbyView.astro';
+import { t } from '../../i18n/ui';
+import type { Lang } from '../../i18n/types';
+
+const lang: Lang = 'en';
+---
+
+<BaseLayout
+  lang={lang}
+  title={`H3 Atlas & Reference Assistant — Agriculture Atlas`}
+  description={t(lang, 'meta.description')}
+  path="/chat"
+>
+  <ChatStandbyView lang={lang} />
+</BaseLayout>

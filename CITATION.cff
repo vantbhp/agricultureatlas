@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+message: "If you use Agriculture Atlas software, schemas, or technical documentation, please cite it using the metadata below."
+type: software
+title: "Agriculture Atlas: Zero-IoT Virtual Agro-Sensor Twins and Offline Zero-Literacy Agronomic Reference Systems for Climate-Vulnerable Smallholder Farming"
+abstract: "Agriculture Atlas is a non-commercial, open-science agronomic intelligence initiative that transforms Uber H3 spatial cells into Zero-IoT Virtual Agro-Sensor Twins by coupling deterministic FAO-56 Penman-Monteith agro-physics with an MIT/Apache-2.0 four-SKU foundation model stack on Microsoft Azure NVIDIA GPUs and NVIDIA Brev, paired with sub-5 KB offline delta synchronization and zero-literacy voice-first mobile interfaces for smallholder farmers."
+version: "1.0.0"
+date-released: "2026-11-23"
+license: Apache-2.0
+repository-code: "https://github.com/vantbhp/agricultureatlas"
+url: "https://agricultureatlas.org"
+authors:
+  - family-names: "Le"
+    given-names: "Van"
+    alias: "Lê Thành Văn"
+    affiliation: "Agriculture Atlas Open-Science Initiative"
+    orcid: "https://orcid.org/0009-0005-3514-106X"
+    email: "van.le@agricultureatlas.org"
+contact:
+  - name: "Agriculture Atlas Research Office"
+    email: "research@agricultureatlas.org"
+    website: "https://agricultureatlas.org"
+keywords:
+  - agro-climatology
+  - FAO-56 Penman-Monteith
+  - virtual agro-sensor twin
+  - Uber H3
+  - Earth observation foundation models
+  - Microsoft Aurora
+  - NVIDIA Earth-2
+  - TerraMind
+  - zero-literacy HCI
+  - smallholder agriculture
+  - Vietnam
+  - open science
+  - UN SDG 2
+  - UN SDG 13
+preferred-citation:
+  type: report
+  title: "Agriculture Atlas: Zero-IoT Virtual Agro-Sensor Twins and Offline Zero-Literacy Agronomic Reference Systems for Climate-Vulnerable Smallholder Farming (Technical Report v1.0)"
+  authors:
+    - family-names: "Le"
+      given-names: "Van"
+      alias: "Lê Thành Văn"
+      affiliation: "Agriculture Atlas Open-Science Initiative"
+      orcid: "https://orcid.org/0009-0005-3514-106X"
+  year: 2026
+  month: 11
+  institution:
+    name: "Agriculture Atlas Open-Science Initiative"
+    website: "https://agricultureatlas.org"
+  url: "https://agricultureatlas.org/research"
+  notes: "Zenodo DOI pending upload: 10.5281/zenodo.XXXXXXX"

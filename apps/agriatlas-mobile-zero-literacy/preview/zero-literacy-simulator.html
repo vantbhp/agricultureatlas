@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agriculture Atlas (agricultureatlas.org) — Zero-Literacy Sensory Mobile UX Simulator</title>
+  <style>
+    :root {
+      --bg-base: #070D14;
+      --bg-surface: #0F1924;
+      --bg-card: #132030;
+      --text-primary: #F8FAFC;
+      --text-muted: #94A3B8;
+      --accent-cyan: #00F0FF;
+      --traffic-green: #10B981;
+      --traffic-amber: #F59E0B;
+      --traffic-red: #EF4444;
+      --border-width: 1.5px;
+    }
+
+    body.outdoor-sun-mode {
+      --bg-base: #000000;
+      --bg-surface: #050B11;
+      --bg-card: #08131E;
+      --text-primary: #FFFFFF;
+      --text-muted: #E2E8F0;
+      --border-width: 2.8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 13.5px;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+    }
+
+    /* Product UI Typography Standard Enforcement (<= 22px) */
+    h1, h2, h3, .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .body-text, p {
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .kpi-number {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .kpi-label, caption, .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    td, th, .table-cell, .badge, button, code, pre, .code-snippet {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11.5px;
+    }
+
+    .simulator-shell {
+      width: 100%;
+      max-width: 980px;
+      display: grid;
+      grid-template-columns: 390px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .simulator-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Mobile Device Frame ($50-$70 Android Outdoor Handset) */
+    .phone-frame {
+      background: var(--bg-surface);
+      border: var(--border-width) solid var(--accent-cyan);
+      border-radius: 22px;
+      padding: 14px;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.16);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .phone-statusbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 10px;
+      background: var(--bg-card);
+      border-radius: 10px;
+      border: 1px solid rgba(0, 240, 255, 0.35);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(0, 240, 255, 0.14);
+      color: var(--accent-cyan);
+      border: 1px solid var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .badge-green {
+      background: rgba(16, 185, 129, 0.16);
+      color: var(--traffic-green);
+      border-color: var(--traffic-green);
+    }
+
+    .badge-amber {
+      background: rgba(245, 158, 11, 0.18);
+      color: var(--traffic-amber);
+      border-color: var(--traffic-amber);
+    }
+
+    .badge-red {
+      background: rgba(239, 68, 68, 0.18);
+      color: var(--traffic-red);
+      border-color: var(--traffic-red);
+    }
+
+    /* 4 Mandatory UI State Views (Loading, Empty, Error, Populated) */
+    .ui-state-view {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 500px;
+      justify-content: space-between;
+    }
+
+    .ui-state-view.active {
+      display: flex;
+    }
+
+    .sensory-card {
+      background: var(--bg-card);
+      border: var(--border-width) solid var(--accent-cyan);
+      border-radius: 18px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .sensory-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.24);
+    }
+
+    /* Top Traffic Light Panel */
+    .traffic-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-color: var(--traffic-green);
+    }
+
+    .traffic-pillar {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      background: #04080E;
+      padding: 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .lamp-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      opacity: 0.25;
+      cursor: pointer;
+      border: 1.5px solid rgba(255, 255, 255, 0.35);
+      transition: all 0.18s ease;
+    }
+
+    .lamp-dot.green { background: var(--traffic-green); }
+    .lamp-dot.amber { background: var(--traffic-amber); }
+    .lamp-dot.red { background: var(--traffic-red); }
+
+    .lamp-dot.active {
+      opacity: 1;
+      border-color: #FFFFFF;
+      box-shadow: 0 0 12px currentColor;
+      transform: scale(1.08);
+    }
+
+    /* Center Giant Voice & Camera Leaf Doctor Orb */
+    .giant-orb-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 0;
+    }
+
+    .giant-voice-camera-orb {
+      width: 176px;
+      height: 176px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 35%, #162B40, #09131E);
+      border: 3px solid var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.32);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      text-align: center;
+      padding: 12px;
+    }
+
+    .giant-voice-camera-orb.scanning {
+      border-color: var(--traffic-green);
+      box-shadow: 0 0 22px rgba(16, 185, 129, 0.55);
+    }
+
+    /* Bottom 3 Action Pictogram Cards */
+    .action-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .action-card {
+      background: var(--bg-card);
+      border: var(--border-width) solid var(--accent-cyan);
+      border-radius: 14px;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .action-card.seed { border-color: var(--traffic-green); }
+    .action-card.radio { border-color: var(--traffic-amber); }
+
+    /* Tap-to-Speak Active Voice Bar */
+    .voice-transcript-bar {
+      background: var(--bg-card);
+      border: var(--border-width) solid var(--traffic-green);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    /* Right Side Inspector & Control Deck */
+    .control-deck {
+      background: var(--bg-surface);
+      border: var(--border-width) solid rgba(0, 240, 255, 0.45);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button.ctrl-btn {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1.2px solid rgba(0, 240, 255, 0.45);
+      border-radius: 8px;
+      padding: 7px 11px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button.ctrl-btn.active {
+      background: rgba(0, 240, 255, 0.2);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    table.telemetry-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table.telemetry-table th,
+    table.telemetry-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: left;
+    }
+
+    @keyframes pulseRadar {
+      0% { transform: scale(0.92); opacity: 0.75; }
+      50% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(0.92); opacity: 0.75; }
+    }
+
+    .pulse-svg {
+      animation: pulseRadar 1.8s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="simulator-shell">
+    <!-- LEFT: ZERO-LITERACY MOBILE APP HANDSET -->
+    <section class="phone-frame" aria-label="Zero-Literacy Mobile Handset">
+      <header class="phone-statusbar" onclick="speakCurrentCellInfo()">
+        <span class="badge" id="h3Badge">H3:8865b56623fffff • paddy</span>
+        <span class="badge badge-green" id="packetSizeBadge">3.8KB (&lt;5KB)</span>
+      </header>
+
+      <!-- STATE 1: LOADING (Đang Khóa Vệ Tinh GPS -> H3) -->
+      <div id="view-loading" class="ui-state-view" data-ui-state="loading">
+        <div class="sensory-card" style="text-align:center; margin:auto 0;" onclick="speakText(STATE_UTTERANCES.loading)">
+          <svg class="pulse-svg" width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="64" cy="64" r="54" stroke="#00F0FF" stroke-width="2" stroke-dasharray="6 4" opacity="0.45" />
+            <circle cx="64" cy="64" r="38" stroke="#00F0FF" stroke-width="2.5" opacity="0.75" />
+            <rect x="52" y="52" width="24" height="24" rx="5" fill="#10B981" stroke="#FFFFFF" stroke-width="2" />
+            <rect x="24" y="56" width="22" height="16" rx="3" fill="#00F0FF" />
+            <rect x="82" y="56" width="22" height="16" rx="3" fill="#00F0FF" />
+          </svg>
+          <h2 class="section-title" style="color: var(--accent-cyan); margin-top: 10px;">
+            LOADING • ĐANG KHÓA VỆ TINH H3 RES-8
+          </h2>
+          <p class="body-text" style="margin-top: 6px;">
+            “Cháu đang tìm vị trí ruộng của bác, bác chờ cháu một chút nhé!”
+          </p>
+        </div>
+      </div>
+
+      <!-- STATE 2: EMPTY (Chưa Đứng Ngoài Ruộng / Chưa Cấp Quyền Vị Trí) -->
+      <div id="view-empty" class="ui-state-view" data-ui-state="empty">
+        <div class="sensory-card" style="text-align:center; margin:auto 0; border-color: var(--traffic-green);" onclick="setUiState('populated')">
+          <svg class="pulse-svg" width="132" height="132" viewBox="0 0 132 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Conical Farmer Hat (Nón lá) -->
+            <path d="M26 54L66 20L106 54H26Z" stroke="#00F0FF" stroke-width="3.5" fill="rgba(0,240,255,0.12)" />
+            <!-- Giant Pulsing Green Arrow -->
+            <path d="M30 82H74V66L106 90L74 114V98H30V82Z" fill="#10B981" stroke="#FFFFFF" stroke-width="2" />
+          </svg>
+          <h2 class="section-title" style="color: var(--traffic-green); margin-top: 10px;">
+            EMPTY • BẤM MŨI TÊN XANH ĐỂ VÀO RUỘNG
+          </h2>
+          <p class="body-text" style="margin-top: 6px;">
+            “Bác bấm vào hình mũi tên xanh ở giữa để cháu biết ruộng mình ở đâu nhé!”
+          </p>
+        </div>
+      </div>
+
+      <!-- STATE 3: ERROR / OFFLINE POCKET-EDGE AA-SKU-4 (MobileNetV4 + VieNeu-TTS-v3-Nano + Gemma-4-E2B / Qwen3.5-0.8B, ONNX/GGUF/LiteRT-LM Apache-2.0) -->
+      <div id="view-error" class="ui-state-view" data-ui-state="error">
+        <div class="sensory-card" style="text-align:center; border-color: var(--traffic-green);" onclick="speakText(STATE_UTTERANCES.error)">
+          <svg width="168" height="86" viewBox="0 0 168 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Crossed Cloud (No 4G) -->
+            <circle cx="40" cy="44" r="20" stroke="#F59E0B" stroke-width="2.5" />
+            <line x1="22" y1="26" x2="58" y2="62" stroke="#EF4444" stroke-width="3" />
+            <!-- Arrow -->
+            <path d="M72 44H94" stroke="#00F0FF" stroke-width="3" />
+            <!-- Phone with Green Shield -->
+            <rect x="108" y="14" width="38" height="60" rx="7" stroke="#10B981" stroke-width="3" fill="#071520" />
+            <path d="M127 28L139 34L136 52L127 58L118 52L115 34L127 28Z" fill="#10B981" />
+          </svg>
+          <h2 class="section-title" style="color: var(--traffic-green); margin-top: 6px;">
+            ERROR / OFFLINE • ĐÃ BẬT KHIÊN AA-SKU-4
+          </h2>
+          <p class="body-text" style="margin-top: 4px;">
+            “Ngoài đồng đang mất mạng nhưng không sao đâu bác, máy của bác vẫn soi lá bắt bệnh và xem lịch tưới bình thường!”
+          </p>
+        </div>
+
+        <div class="giant-orb-wrapper">
+          <div class="giant-voice-camera-orb" onclick="triggerLeafDoctor()">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="14" y="14" width="14" height="24" rx="7" stroke="#00F0FF" stroke-width="2.8" />
+              <path d="M10 30C10 36 15 41 21 41C27 41 32 36 32 30" stroke="#00F0FF" stroke-width="2.5" />
+              <path d="M34 46C34 26 52 16 54 18C56 20 50 44 34 46Z" fill="#10B981" />
+            </svg>
+            <span class="section-title">SOI LÁ OFFLINE</span>
+            <span class="badge">MobileNetV4 • VieNeu-TTS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATE 4: POPULATED (Đèn Giao Thông Nông Vụ 3 Màu + 1 Nút Tròn Giữa Màn Hình + 3 Thẻ Hành Động) -->
+      <div id="view-populated" class="ui-state-view active" data-ui-state="populated">
+        <!-- Nửa Trên: Đèn Giao Thông Nông Vụ 3 Màu -->
+        <div id="trafficCard" class="sensory-card traffic-banner" onclick="speakTrafficLight()">
+          <div class="traffic-pillar" aria-label="3-Color Traffic Light">
+            <div id="lamp-green" class="lamp-dot green active" onclick="event.stopPropagation(); setTrafficSignal('green')" title="Đèn Xanh An Toàn"></div>
+            <div id="lamp-amber" class="lamp-dot amber" onclick="event.stopPropagation(); setTrafficSignal('amber')" title="Đèn Vàng Cần Tưới ET0"></div>
+            <div id="lamp-red" class="lamp-dot red" onclick="event.stopPropagation(); setTrafficSignal('red')" title="Đèn Đỏ Mức Chú Ý Mặn / Sương Muối / Đạo Ôn"></div>
+          </div>
+
+          <div id="trafficSvgContainer" aria-hidden="true"></div>
+
+          <div style="flex: 1;">
+            <h2 id="trafficTitle" class="section-title" style="color: var(--traffic-green);">
+              ĐÈN XANH • AN TOÀN
+            </h2>
+            <div style="display: flex; gap: 10px; align-items: baseline; margin: 4px 0;">
+              <span id="kpiEt0" class="kpi-number">ET0 4.1mm</span>
+              <span id="kpiMoisture" class="kpi-number" style="color: var(--traffic-green);">Ẩm 34%</span>
+            </div>
+            <p id="trafficFolkSummary" class="body-text">
+              Đất ẩm sâu 1 đốt ngón tay, nước kênh ngọt lành, chưa cần bơm tưới.
+            </p>
+          </div>
+        </div>
+
+        <!-- Chính Giữa: 1 Nút Tròn Khổng Lồ (Chạm để Nói & Giơ Camera Soi Lá/Đất) -->
+        <div class="giant-orb-wrapper">
+          <div id="centerDoctorOrb" class="giant-voice-camera-orb" onclick="triggerLeafDoctor()">
+            <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Microphone SVG -->
+              <rect x="14" y="14" width="16" height="26" rx="8" stroke="#00F0FF" stroke-width="2.8" />
+              <path d="M10 31C10 38 15 43 22 43C29 43 34 38 34 31" stroke="#00F0FF" stroke-width="2.5" />
+              <line x1="22" y1="43" x2="22" y2="52" stroke="#00F0FF" stroke-width="2.5" />
+              <!-- Camera Leaf SVG -->
+              <path d="M36 48C36 26 56 16 58 18C60 20 54 46 36 48Z" fill="#10B981" stroke="#FFFFFF" stroke-width="1.5" />
+            </svg>
+            <span id="orbLabel" class="section-title">CHẠM NÓI &amp; SOI LÁ</span>
+            <span class="kpi-label" style="color: var(--accent-cyan);">AA-SKU-4 • MobileNetV4 + VieNeu-TTS</span>
+          </div>
+        </div>
+
+        <!-- Nửa Dưới: 3 Thẻ Hình Vẽ Hành Động (Tap-to-Speak Everything) -->
+        <div class="action-grid-3">
+          <!-- Thẻ 1: Xô Nước -->
+          <div class="action-card water" onclick="speakActionCard('water')">
+            <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 16H36L32 38H14L10 16Z" stroke="#00F0FF" stroke-width="2.6" fill="rgba(0,240,255,0.12)" />
+              <path d="M14 16C14 10 32 10 32 16" stroke="#00F0FF" stroke-width="2.4" />
+              <circle cx="23" cy="27" r="4" fill="#00F0FF" />
+            </svg>
+            <span class="section-title" style="font-size: 13px; color: var(--accent-cyan);">TƯỚI HÔM NAY</span>
+            <span class="kpi-label">1 đốt ngón tay</span>
+          </div>
+
+          <!-- Thẻ 2: Hạt Giống / Bón Phân -->
+          <div class="action-card seed" onclick="speakActionCard('seed')">
+            <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="23" y1="38" x2="23" y2="12" stroke="#10B981" stroke-width="2.8" />
+              <ellipse cx="16" cy="24" rx="7" ry="4" stroke="#10B981" stroke-width="2.4" fill="rgba(16,185,129,0.2)" />
+              <ellipse cx="30" cy="18" rx="7" ry="4" stroke="#10B981" stroke-width="2.4" fill="rgba(16,185,129,0.2)" />
+            </svg>
+            <span class="section-title" style="font-size: 13px; color: var(--traffic-green);">LỊCH GIEO / BÓN</span>
+            <span class="kpi-label">Nửa nắp / bình 16L</span>
+          </div>
+
+          <!-- Thẻ 3: Cái Loa Đài Phát Thanh 5h30 Sáng -->
+          <div class="action-card radio" onclick="speakActionCard('radio')">
+            <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 19H18L30 10V36L18 27H10V19Z" stroke="#F59E0B" stroke-width="2.6" fill="rgba(245,158,11,0.16)" />
+              <path d="M35 16C38 20 38 26 35 30" stroke="#F59E0B" stroke-width="2.4" />
+            </svg>
+            <span class="section-title" style="font-size: 13px; color: var(--traffic-amber);">ĐÀI 5H30 SÁNG</span>
+            <span class="kpi-label">Nghe bản tin</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tap-to-Speak Everything Active Voice Bar -->
+      <footer class="voice-transcript-bar" onclick="replayLastUtterance()">
+        <span class="badge badge-green">🔊 LOA</span>
+        <p id="spokenTranscriptText" class="body-text" style="flex: 1;">
+          Đèn Xanh an toàn bác ơi! Hôm nay đất ruộng đủ ẩm sâu một đốt ngón tay, nước kênh ngọt lành, bác cứ yên tâm nghỉ ngơi!
+        </p>
+      </footer>
+    </section>
+
+    <!-- RIGHT: CONTROL DECK & H3 OFFLINE PACKET INSPECTOR -->
+    <aside class="control-deck" aria-label="Simulator Controls and Telemetry">
+      <div>
+        <h1 class="section-title" style="color: var(--accent-cyan);">
+          AGRICULTURE ATLAS ZERO-LITERACY SENSORY UX CONTROLLER
+        </h1>
+        <p class="subtitle">
+          Không Chữ • Không Phím • Không Đăng Nhập • AA-SKU-4 (MobileNetV4 + VieNeu-TTS-v3-Nano + Gemma-4-E2B / Qwen3.5-0.8B, ONNX/GGUF/LiteRT-LM Apache-2.0)
+        </p>
+      </div>
+
+      <div>
+        <h2 class="section-title">1. Chuyển Đổi 4 Trạng Thái UI Bắt Buộc (`Loading`, `Empty`, `Error`, `Populated`)</h2>
+        <div class="btn-row" style="margin-top: 6px;">
+          <button id="btn-state-loading" class="ctrl-btn" onclick="setUiState('loading')">Loading (Khóa GPS H3)</button>
+          <button id="btn-state-empty" class="ctrl-btn" onclick="setUiState('empty')">Empty (Chưa Ra Ruộng)</button>
+          <button id="btn-state-error" class="ctrl-btn" onclick="setUiState('error')">Error (Offline AA-SKU-4)</button>
+          <button id="btn-state-populated" class="ctrl-btn active" onclick="setUiState('populated')">Populated (Đèn Giao Thông)</button>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="section-title">2. Chuyển Đổi 3 Mức Đèn Giao Thông Nông Vụ</h2>
+        <div class="btn-row" style="margin-top: 6px;">
+          <button id="btn-sig-green" class="ctrl-btn active" onclick="setTrafficSignal('green')">🟢 Xanh #10B981 (An Toàn)</button>
+          <button id="btn-sig-amber" class="ctrl-btn" onclick="setTrafficSignal('amber')">🟡 Vàng #F59E0B (Cần Tưới ET0)</button>
+          <button id="btn-sig-red" class="ctrl-btn" onclick="setTrafficSignal('red')">🔴 Đỏ #EF4444 (Mặn / Sương Muối / Đạo Ôn)</button>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="section-title">3. Chế Độ Nắng Gắt Ngoài Đồng (`Outdoor Sun High-Contrast Mode`)</h2>
+        <div class="btn-row" style="margin-top: 6px;">
+          <button id="btn-sun-mode" class="ctrl-btn" onclick="toggleOutdoorSunMode()">☀️ Bật / Tắt Chế Độ Nắng Gắt Ngoài Đồng</button>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="section-title">4. Gói Tin Đồng Ruộng H3 Offline (`&lt; 5 KB` ZSTD Compact Packet)</h2>
+        <table class="telemetry-table" style="margin-top: 6px;">
+          <thead>
+            <tr>
+              <th>Trường Vật Lý Nông Học</th>
+              <th>Giá Trị Thực Tế</th>
+              <th>Đơn Vị Dân Dã</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ô Lục Giác H3 &amp; Chủ Quyền</td>
+              <td id="tdH3">8865b56623fffff (VN - Hoàng Sa &amp; Trường Sa Guard)</td>
+              <td>Khóa GPS tự động</td>
+            </tr>
+            <tr>
+              <td>Lớp Đất Canh Tác (`land_use`)</td>
+              <td id="tdLandUse">paddy_irrigated (Miền Tây Nam Bộ)</td>
+              <td>Ruộng lúa nước</td>
+            </tr>
+            <tr>
+              <td>Kích Thước Gói Offline</td>
+              <td id="tdPacketBytes">3,840 bytes (3.8 KB &lt; 5 KB)</td>
+              <td>Tải trong 0.2 giây 2G/4G</td>
+            </tr>
+            <tr>
+              <td>Độ Ẩm Vùng Rễ (`soil_moisture_root_zone`)</td>
+              <td id="tdSoilMoisture">0.34 m³/m³ (34%)</td>
+              <td>Ẩm sâu 1 đốt ngón tay</td>
+            </tr>
+            <tr>
+              <td>Bốc Thoát Hơi (`et0_mm_day`)</td>
+              <td id="tdEt0">4.1 mm/ngày</td>
+              <td>Chưa cần bơm thêm</td>
+            </tr>
+            <tr>
+              <td>Xâm Nhập Mặn / Sương Muối / Lá Ướt</td>
+              <td id="tdRisk">Mặn 0.8 g/L • Sương 0.0 • Lá ướt 3.5h</td>
+              <td>Nửa nắp chai / bình 16L</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const STATE_UTTERANCES = {
+      loading: "Cháu đang tìm vị trí ruộng của bác, bác chờ cháu một chút nhé!",
+      empty: "Bác bấm vào hình mũi tên xanh ở giữa để cháu biết ruộng mình ở đâu nhé!",
+      error: "Ngoài đồng đang mất mạng nhưng không sao đâu bác, máy của bác vẫn soi lá bắt bệnh và xem lịch tưới bình thường!"
+    };
+
+    const SIGNAL_PACKETS = {
+      green: {
+        h3: "8865b56623fffff",
+        landUse: "paddy_irrigated",
+        dialect: "Phương ngữ Miền Tây Nam Bộ",
+        bytes: 3840,
+        et0: "ET0 4.1mm",
+        moisture: "Ẩm 34%",
+        riskText: "Mặn 0.8 g/L • Sương 0.0 • Lá ướt 3.5h",
+        color: "#10B981",
+        title: "ĐÈN XANH • ĐỒNG RUỘNG AN TOÀN",
+        summary: "Đất ẩm sâu 1 đốt ngón tay, nước kênh ngọt lành, chưa cần bơm tưới.",
+        svg: `<svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="34" cy="34" r="30" stroke="#10B981" stroke-width="2.5" fill="rgba(16,185,129,0.12)" />
+                <path d="M34 54V16" stroke="#10B981" stroke-width="3.2" />
+                <ellipse cx="24" cy="36" rx="8" ry="4" stroke="#10B981" stroke-width="2.4" />
+                <ellipse cx="44" cy="28" rx="8" ry="4" stroke="#10B981" stroke-width="2.4" />
+              </svg>`,
+        spokenTraffic: "Đèn Xanh an toàn bác ơi! Hôm nay đất ruộng đủ ẩm sâu một đốt ngón tay, nước kênh ngọt lành, bác cứ yên tâm nghỉ ngơi, chưa cần bơm nước hay phun thuốc đâu nghen!",
+        spokenWater: "Xô Nước Tưới Hôm Nay: Đất gốc lúa đang ẩm tốt, bốc hơi nước bốn phẩy một ly. Hôm nay bác khóa cống, giữ mực nước ruộng sâu đúng một đốt ngón tay là vừa đẹp, chưa cần tưới thêm xô 10 lít đâu nhé!",
+        spokenSeed: "Lịch Gieo Bón Hôm Nay: Trời nắng ấm thuận lợi, ngày mai lúc bảy giờ sáng bác rải phân đón đòng, pha thêm nửa nắp chai vi sinh cho mỗi bình đeo vai mười sáu lít nước nhé!",
+        spokenRadio: "Đài Phát Thanh Năm Giờ Rưỡi Sáng: Chào bà con Đồng Bằng Sông Cửu Long! Sáng nay gió nhẹ, nước ngọt về đầy kênh nội đồng, bà con thăm bờ bao và giữ nước ấm chân lúa.",
+        spokenDoctor: "Đã mở camera soi lá và đất rồi bác ơi, bác giơ sát vào lá cây giúp cháu nhé! Có vết đốm nào bác cứ nói cho cháu nghe!"
+      },
+      amber: {
+        h3: "886592491bfffff",
+        landUse: "orchard_coffee_durian",
+        dialect: "Phương ngữ Tây Nguyên",
+        bytes: 4120,
+        et0: "ET0 5.8mm",
+        moisture: "Ẩm 19%",
+        riskText: "Mặn 0.1 g/L • Sương 0.05 • Lá ướt 2.0h",
+        color: "#F59E0B",
+        title: "ĐÈN VÀNG • CẦN TƯỚI NƯỚC HÔM NAY",
+        summary: "Đất khô quá 1 đốt ngón tay, chiều mát 4h30 bác mở van tưới gốc nhé!",
+        svg: `<svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="34" cy="26" r="12" stroke="#F59E0B" stroke-width="3" fill="rgba(245,158,11,0.2)" />
+                <circle cx="24" cy="50" r="4.5" fill="#00F0FF" />
+                <circle cx="34" cy="54" r="4.5" fill="#00F0FF" />
+                <circle cx="44" cy="50" r="4.5" fill="#00F0FF" />
+              </svg>`,
+        spokenTraffic: "Đèn Vàng cần tưới nước bác ơi! Nắng gió Tây Nguyên làm bốc hơi gần sáu ly nước hôm nay, đất dưới rễ khô quá một đốt ngón tay rồi, chiều mát bác mở van tưới gốc nhé!",
+        spokenWater: "Xô Nước Tưới Hôm Nay: Đất khô xuống sâu một gang tay rồi bác ạ! Đúng bốn giờ rưỡi chiều bác tưới khoảng hai xô 10 lít quanh tán cà phê và sầu riêng cho đất ẩm lại một đốt ngón tay nhé!",
+        spokenSeed: "Lịch Gieo Bón Hôm Nay: Đang nắng gắt bác khoan bón phân hạt kẻo bốc hơi mất chất. Bác chờ tưới ẩm đất xong sáng mai hãy hòa nửa nắp chai dưỡng rễ vào bình đeo vai mười sáu lít!",
+        spokenRadio: "Đài Phát Thanh Năm Giờ Rưỡi Sáng: Bà con Tây Nguyên lưu ý hôm nay nắng hanh, độ ẩm rễ giảm nhanh, bà con ưu tiên tưới tiết kiệm dưới tán cây vào buổi chiều mát.",
+        spokenDoctor: "Đã mở camera soi lá và đất rồi bác ơi, bác giơ sát vào mặt dưới lá cà phê hoặc gốc sầu riêng giúp cháu kiểm tra rệp sáp và nấm hồng ngay tại vườn nhé!"
+      },
+      red: {
+        h3: "8865b56697fffff",
+        landUse: "paddy_aquaculture",
+        dialect: "Phương ngữ Bắc Bộ & Nam Bộ",
+        bytes: 4480,
+        et0: "ET0 3.4mm",
+        moisture: "Mặn 4.6‰",
+        riskText: "Mặn 4.6 g/L • Sương muối 0.88 • Lá ướt 11.5h",
+        color: "#EF4444",
+        title: "ĐÈN ĐỎ • MỨC CHÚ Ý MẶN / SƯƠNG MUỐI / ĐẠO ÔN",
+        summary: "Đóng kín cống ngăn mặn ngay! Pha nửa nắp chai sinh học / bình 16L ngừa đạo ôn.",
+        svg: `<svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M34 12L58 54H10L34 12Z" stroke="#EF4444" stroke-width="3" fill="rgba(239,68,68,0.18)" />
+                <line x1="34" y1="26" x2="34" y2="40" stroke="#FFFFFF" stroke-width="3" />
+                <circle cx="34" cy="47" r="2.5" fill="#FFFFFF" />
+              </svg>`,
+        spokenTraffic: "Mức chú ý Đèn Đỏ bác ơi! Ngoài kênh đang có nước mặn bốn phẩy sáu phần nghìn, lá lúa ướt sương dễ bùng bệnh đạo ôn và vùng núi có sương muối lạnh! Bác đóng kín cống lấy nước ngay nhé!",
+        spokenWater: "Mức chú ý Đèn Đỏ về nước tưới: Nước ngoài sông đang nhiễm mặn nặng lắm bác ơi! Bác tuyệt đối không bơm nước ngoài kênh vào ruộng lúc này, chỉ dùng nước ngọt dự trữ khoảng một xô 10 lít mỗi gốc trong vườn thôi nhé!",
+        spokenSeed: "Mức chú ý Đèn Đỏ về chăm sóc: Đêm nay sương ướt lá suốt mười một tiếng và trời trở lạnh, bác tuyệt đối không bón đạm! Chờ nắng lên bác pha nửa nắp chai thuốc sinh học trị đạo ôn vào bình đeo vai mười sáu lít nhé!",
+        spokenRadio: "Đài Phát Thanh Năm Giờ Rưỡi Sáng: Mức chú ý Đèn Đỏ về xâm nhập mặn cửa sông Tiền sông Hậu và rét đậm sương muối miền núi phía Bắc! Bà con đóng cống ngăn mặn và che ấm mạ ngay sáng nay!",
+        spokenDoctor: "Đã mở camera soi lá và đất rồi bác ơi, bác giơ sát vào chiếc lá có vết chấm kim hay hình mắt én giúp cháu xem mức độ đạo ôn ngay tại ruộng nhé!"
+      }
+    };
+
+    let currentUiState = "populated";
+    let currentSignal = "green";
+    let lastUtterance = SIGNAL_PACKETS.green.spokenTraffic;
+
+    function speakText(text) {
+      lastUtterance = text;
+      const transcriptEl = document.getElementById("spokenTranscriptText");
+      if (transcriptEl) {
+        transcriptEl.textContent = text;
+      }
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = "vi-VN";
+        utterance.rate = 0.96;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function replayLastUtterance() {
+      speakText(lastUtterance);
+    }
+
+    function setUiState(nextState) {
+      currentUiState = nextState;
+      ["loading", "empty", "error", "populated"].forEach((st) => {
+        const view = document.getElementById("view-" + st);
+        const btn = document.getElementById("btn-state-" + st);
+        if (view) view.classList.toggle("active", st === nextState);
+        if (btn) btn.classList.toggle("active", st === nextState);
+      });
+      if (nextState === "populated") {
+        speakText(SIGNAL_PACKETS[currentSignal].spokenTraffic);
+      } else {
+        speakText(STATE_UTTERANCES[nextState]);
+      }
+    }
+
+    function setTrafficSignal(sig) {
+      currentSignal = sig;
+      if (currentUiState !== "populated") {
+        setUiState("populated");
+      }
+      const pkt = SIGNAL_PACKETS[sig];
+      ["green", "amber", "red"].forEach((k) => {
+        const lamp = document.getElementById("lamp-" + k);
+        const btn = document.getElementById("btn-sig-" + k);
+        if (lamp) lamp.classList.toggle("active", k === sig);
+        if (btn) btn.classList.toggle("active", k === sig);
+      });
+
+      const card = document.getElementById("trafficCard");
+      if (card) card.style.borderColor = pkt.color;
+
+      const title = document.getElementById("trafficTitle");
+      if (title) {
+        title.textContent = pkt.title;
+        title.style.color = pkt.color;
+      }
+
+      document.getElementById("kpiEt0").textContent = pkt.et0;
+      const moistEl = document.getElementById("kpiMoisture");
+      moistEl.textContent = pkt.moisture;
+      moistEl.style.color = pkt.color;
+
+      document.getElementById("trafficFolkSummary").textContent = pkt.summary;
+      document.getElementById("trafficSvgContainer").innerHTML = pkt.svg;
+
+      document.getElementById("h3Badge").textContent = `H3:${pkt.h3} • ${pkt.landUse}`;
+      document.getElementById("packetSizeBadge").textContent = `${(pkt.bytes / 1024).toFixed(1)}KB (<5KB)`;
+      document.getElementById("tdH3").textContent = `${pkt.h3} (VN - Hoàng Sa & Trường Sa Guard)`;
+      document.getElementById("tdLandUse").textContent = `${pkt.landUse} (${pkt.dialect})`;
+      document.getElementById("tdPacketBytes").textContent = `${pkt.bytes} bytes (${(pkt.bytes / 1024).toFixed(1)} KB < 5 KB)`;
+      document.getElementById("tdEt0").textContent = pkt.et0;
+      document.getElementById("tdSoilMoisture").textContent = pkt.moisture;
+      document.getElementById("tdRisk").textContent = pkt.riskText;
+
+      speakText(pkt.spokenTraffic);
+    }
+
+    function speakTrafficLight() {
+      speakText(SIGNAL_PACKETS[currentSignal].spokenTraffic);
+    }
+
+    function speakActionCard(kind) {
+      const pkt = SIGNAL_PACKETS[currentSignal];
+      if (kind === "water") speakText(pkt.spokenWater);
+      if (kind === "seed") speakText(pkt.spokenSeed);
+      if (kind === "radio") speakText(pkt.spokenRadio);
+    }
+
+    function triggerLeafDoctor() {
+      const orb = document.getElementById("centerDoctorOrb");
+      if (orb) orb.classList.toggle("scanning");
+      speakText(SIGNAL_PACKETS[currentSignal].spokenDoctor);
+    }
+
+    function speakCurrentCellInfo() {
+      const pkt = SIGNAL_PACKETS[currentSignal];
+      speakText(`Đã khóa vị trí ruộng của bác rồi ạ, gói tin siêu nhẹ dưới năm ký lô bai, đang nói ${pkt.dialect} cho bác dễ nghe nhé!`);
+    }
+
+    function toggleOutdoorSunMode() {
+      const enabled = document.body.classList.toggle("outdoor-sun-mode");
+      const btn = document.getElementById("btn-sun-mode");
+      if (btn) btn.classList.toggle("active", enabled);
+      speakText(
+        enabled
+          ? "Đã bật chế độ Nắng Gắt Ngoài Đồng tương phản cực cao để bác nhìn rõ dưới trời nắng trưa!"
+          : "Đã chuyển về chế độ màn hình dịu mắt buổi sáng sớm."
+      );
+    }
+
+    // Initialize default SVG pictogram on load
+    document.getElementById("trafficSvgContainer").innerHTML = SIGNAL_PACKETS.green.svg;
+  </script>
+</body>
+</html>

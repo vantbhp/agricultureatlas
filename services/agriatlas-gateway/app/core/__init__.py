@@ -1,0 +1,43 @@
+"""Core Physics & Open-Science Azure/Aurora Agro-SKU Engine for Agriculture Atlas."""
+
+from app.core.agro_physics_engine import (
+    OPEN_SCIENCE_AZURE_AURORA_SKUS,
+    VIETNAM_AGRO_ZONES,
+    VirtualAgroSensorInput,
+    VirtualAgroSensorTwinReading,
+    build_h3_agro_delta_packet,
+    classify_agro_traffic_light,
+    compute_crop_stress_gravity_score,
+    compute_fao56_et0_mm_day,
+    compute_frost_risk_index,
+    compute_gdd_accumulated,
+    compute_leaf_wetness_hours,
+    compute_salinity_risk_index,
+    compute_soil_moisture_root_zone,
+    decode_h3_agro_delta_packet,
+    evaluate_virtual_agro_sensor_twin,
+    get_open_science_sku_manifest,
+    get_vietnam_agro_zones,
+    resolve_agro_zone_for_h3,
+)
+
+__all__ = [
+    "OPEN_SCIENCE_AZURE_AURORA_SKUS",
+    "VIETNAM_AGRO_ZONES",
+    "VirtualAgroSensorInput",
+    "VirtualAgroSensorTwinReading",
+    "build_h3_agro_delta_packet",
+    "classify_agro_traffic_light",
+    "compute_crop_stress_gravity_score",
+    "compute_fao56_et0_mm_day",
+    "compute_frost_risk_index",
+    "compute_gdd_accumulated",
+    "compute_leaf_wetness_hours",
+    "compute_salinity_risk_index",
+    "compute_soil_moisture_root_zone",
+    "decode_h3_agro_delta_packet",
+    "evaluate_virtual_agro_sensor_twin",
+    "get_open_science_sku_manifest",
+    "get_vietnam_agro_zones",
+    "resolve_agro_zone_for_h3",
+]

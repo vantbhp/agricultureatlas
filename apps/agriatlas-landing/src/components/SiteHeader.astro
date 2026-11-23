@@ -1,0 +1,143 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { t } from '../i18n/ui';
+import { chatUrl, localePath, type Lang } from '../i18n/types';
+
+interface Props {
+  lang: Lang;
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+const home = localePath('/', lang);
+const researchHref = localePath('/research', lang);
+const assistantHref = chatUrl(lang);
+const isHome = path === '/';
+const isResearch = path === '/research';
+const anchor = (id: string) => (isHome ? `#${id}` : `${home}#${id}`);
+
+const links = [
+  { id: 'how', label: t(lang, 'nav.how') },
+  { id: 'indices', label: t(lang, 'nav.indices') },
+  { id: 'regions', label: t(lang, 'nav.regions') },
+  { id: 'data', label: t(lang, 'nav.data') },
+] as const;
+---
+
+<header class="site-header" data-header>
+  <div class="container bar">
+    <a class="brand" href={home} aria-label="Agriculture Atlas">
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+        <polygon points="20,3 34.4,11.3 34.4,27.8 20,36 5.6,27.8 5.6,11.3" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linejoin="round"></polygon>
+        <path d="M20 31 C20 24 16 20 11.5 18.5 C16 18.5 19 20.5 20 24 C20.8 19 24.5 15 29.5 14.5 C26 17 21.5 21 20 31 Z" fill="var(--text)"></path>
+      </svg>
+      <span class="wordmark">Agriculture Atlas</span>
+    </a>
+    <nav class="primary-nav" aria-label="Agriculture Atlas">
+      <ul role="list">
+        {links.map((l) => <li><a href={anchor(l.id)}>{l.label}</a></li>)}
+        <li>
+          <a
+            href={researchHref}
+            class:list={['nav-research', { active: isResearch }]}
+            aria-current={isResearch ? 'page' : undefined}
+          >
+            {t(lang, 'nav.research')}
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="actions">
+      <a
+        class:list={['mobile-research', { active: isResearch }]}
+        href={researchHref}
+        aria-current={isResearch ? 'page' : undefined}
+      >
+        {t(lang, 'nav.research')}
+      </a>
+      <LanguageSwitcher lang={lang} path={path} />
+      <a class="btn btn-primary cta" href={assistantHref} rel="noopener">{t(lang, 'nav.cta')}</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    transition: background-color 300ms var(--ease), border-color 300ms var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+  :global(.site-header.scrolled) {
+    background: rgb(7 10 14 / 0.78);
+    backdrop-filter: blur(14px) saturate(130%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
+    border-bottom-color: var(--line);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 68px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; min-height: var(--tap); color: var(--text); text-decoration: none; }
+  .mark { width: 30px; height: 30px; }
+  .wordmark { font-family: var(--display); font-size: 22px; font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; }
+  .primary-nav { display: none; }
+  .primary-nav ul { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .primary-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-2);
+    text-decoration: none;
+    border-radius: 999px;
+    transition: color 200ms var(--ease), background-color 200ms var(--ease), border-color 200ms var(--ease);
+  }
+  .primary-nav a:hover { color: var(--text); background: rgb(238 243 240 / 0.08); }
+  .primary-nav a.nav-research {
+    color: var(--text);
+    border: 1px solid rgb(0 240 255 / 0.35);
+    background: rgb(0 240 255 / 0.08);
+  }
+  .primary-nav a.nav-research:hover,
+  .primary-nav a.nav-research.active {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: rgb(0 240 255 / 0.14);
+  }
+  .actions { display: flex; align-items: center; gap: 10px; }
+  .mobile-research {
+    display: none;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid rgb(0 240 255 / 0.35);
+    background: rgb(0 240 255 / 0.08);
+    border-radius: 999px;
+    transition: color 200ms var(--ease), border-color 200ms var(--ease), background-color 200ms var(--ease);
+  }
+  .mobile-research:hover,
+  .mobile-research.active {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: rgb(0 240 255 / 0.14);
+  }
+  .cta { display: none; min-height: 44px; padding: 0 20px; font-size: 15px; }
+  @media (min-width: 480px) { .mobile-research { display: inline-flex; } }
+  @media (min-width: 640px) { .cta { display: inline-flex; } }
+  @media (min-width: 1024px) {
+    .primary-nav { display: block; }
+    .mobile-research { display: none; }
+  }
+</style>

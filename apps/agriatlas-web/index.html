@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark" data-ui-state="populated">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agriculture Atlas (https://agricultureatlas.org/vi/chat) — Chỉ Số Nông Học Tham Khảo &amp; Bản Đồ H3</title>
+  <meta name="description" content="Bản đồ Lưới H3 & Chỉ số Nông học Tham khảo Không Cần IoT. 100% Khoa học Mở Phi lợi nhuận (UN SDG #2 & #13) vận hành độc lập bởi 4 SKU Khoa Học Mở (Azure NVIDIA GPU & NVIDIA Brev, MIT / Apache-2.0)." />
+  <link rel="stylesheet" href="/styles/scientific-atlas.css?v=2" />
+</head>
+<body data-theme="dark" data-ui-state="populated" data-active-zone="VN_MKD" data-active-h3="8765b566affffff">
+  <div class="app-container">
+    <!-- ========================================================================
+         54PX COPILOT HEADER (Agriculture Atlas Split-Screen Open-Science Header)
+         ======================================================================== -->
+    <header class="copilot-header" role="banner">
+      <!-- LEFT: Mobile Menu + Brand Logo + Active Crop Season & H3 Breadcrumb -->
+      <div class="header-left">
+        <button type="button" class="header-menu-btn" id="mobile-menu-btn" aria-label="Mở lịch sử mùa vụ">
+          ☰
+        </button>
+
+        <div class="brand-logo" id="brand-home-trigger" title="Agriculture Atlas — Chỉ số Nông học Tham khảo Không Cần IoT">
+          <div class="logo-icon" aria-hidden="true">🌾</div>
+          <div style="display: flex; align-items: center; gap: 5px;">
+            <span class="logo-title">Agriculture Atlas</span>
+            <span class="brand-badge">✨ AI</span>
+          </div>
+        </div>
+
+        <div class="header-trip-breadcrumb" title="Mùa vụ &amp; Ô lục giác H3 đang giám sát">
+          <span class="header-breadcrumb-slash" aria-hidden="true">/</span>
+          <span class="header-breadcrumb-title" id="header-active-season-title">
+            Vụ Đông Xuân ĐBSCL • Ô H3 8765b566affffff
+          </span>
+        </div>
+      </div>
+
+      <!-- RIGHT: 0. + Mùa vụ mới, 1. 100% Miễn phí Zero-IoT, 2. Vùng VN, 3. Không Chữ, 4. Chia sẻ, 5. Sáng/Tối, 6. 4 UI States -->
+      <div class="header-right">
+        <!-- 0. + Mùa vụ mới -->
+        <button type="button" class="header-new-trip-btn" id="btn-new-season" title="Tạo phiên tư vấn mùa vụ mới">
+          <span>＋ Mùa vụ mới</span>
+        </button>
+
+        <!-- 1. Huy hiệu Khoa học Mở 4 SKU Open-Science Stack -->
+        <button type="button" class="header-membership-btn" id="btn-open-sku-modal" title="100% Non-Commercial Public Good (UN SDG #2 &amp; #13) • 4 SKU Khoa Học Mở (Azure NVIDIA GPU &amp; NVIDIA Brev, 100% MIT / Apache-2.0)">
+          <span>🌱 100% Miễn phí • Zero-IoT</span>
+        </button>
+
+        <!-- 2. Capsule Chọn Ngôn ngữ & 5 Vùng Khí Hậu Nông Nghiệp Việt Nam -->
+        <div class="header-popover-anchor">
+          <button type="button" class="header-pref-btn" id="btn-zone-popover" aria-expanded="false">
+            <span id="header-zone-pill-label">🌐 Tiếng Việt · ĐBSCL ▾</span>
+          </button>
+          <div class="header-actions-popover" id="zone-select-popover" hidden>
+            <div class="kpi-label" style="padding: 4px 8px;">CHỌN 5 VÙNG NÔNG NGHIỆP VIỆT NAM</div>
+            <button type="button" class="header-popover-item active" data-zone-select="VN_MKD">
+              <span>🌾 1. Đồng bằng Sông Cửu Long</span>
+              <code>VN_MKD</code>
+            </button>
+            <button type="button" class="header-popover-item" data-zone-select="VN_CH">
+              <span>☕ 2. Tây Nguyên (Cà phê, Sầu riêng)</span>
+              <code>VN_CH</code>
+            </button>
+            <button type="button" class="header-popover-item" data-zone-select="VN_RRD_NWM">
+              <span>❄️ 3. ĐB Sông Hồng &amp; Tây Bắc</span>
+              <code>VN_RRD_NWM</code>
+            </button>
+            <button type="button" class="header-popover-item" data-zone-select="VN_CCC">
+              <span>🌵 4. Duyên hải Miền Trung</span>
+              <code>VN_CCC</code>
+            </button>
+            <button type="button" class="header-popover-item" data-zone-select="VN_HS_TS">
+              <span>🇻🇳 5. Hoàng Sa &amp; Trường Sa (VN)</span>
+              <code>VN_HS_TS</code>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Nút Chế độ Không Chữ (/mobile) -->
+        <a href="/mobile" class="header-pref-btn" id="btn-zero-literacy-mode" style="text-decoration: none;" title="Mở Giao diện Không Chữ - Không Phím cho nông dân ngoài đồng">
+          <span>🔊 Chế độ Không Chữ</span>
+        </a>
+
+        <!-- 4. Popover Chia sẻ & Xuất lịch -->
+        <div class="header-popover-anchor">
+          <button type="button" class="header-share-btn" id="btn-share-popover" aria-expanded="false">
+            <span>Chia sẻ &amp; Xuất lịch ▾</span>
+          </button>
+          <div class="header-actions-popover" id="share-actions-popover" hidden>
+            <button type="button" class="header-popover-item" id="menu-export-offline-pack">
+              <span>📦 Tải Gói Offline H3 (&lt; 5 KB)</span>
+              <code>ZSTD</code>
+            </button>
+            <button type="button" class="header-popover-item" id="menu-open-passport-tab">
+              <span>🪪 Mở Thẻ Hộ Chiếu Ruộng Đồng</span>
+              <code>H3</code>
+            </button>
+            <button type="button" class="header-popover-item" id="menu-speak-morning-radio">
+              <span>📻 Phát Đài Đồng Ruộng 5h30 Sáng</span>
+              <code>TTS</code>
+            </button>
+            <button type="button" class="header-popover-item" id="menu-print-schedule">
+              <span>🖨️ In Lịch Tưới ET0 &amp; Bón Phân</span>
+              <code>PDF</code>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. Nút chuyển đổi Sáng / Tối (Dark #0b0f19 <-> Light Warm Paper #F4EFE6) -->
+        <button type="button" class="theme-toggle-btn" id="btn-theme-toggle" title="Chuyển đổi giao diện Sáng (Warm Paper #F4EFE6) / Tối (Slate Night #0b0f19)" aria-label="Đổi giao diện Sáng Tối">
+          ☀️
+        </button>
+
+        <!-- 6. Bộ nút chuyển nhanh 4 Trạng thái UI (Populated, Loading, Empty, Error) -->
+        <div class="state-pill-group" id="ui-state-switcher" role="group" aria-label="Bộ chuyển đổi 4 trạng thái giao diện">
+          <button type="button" class="state-btn active" data-state-target="populated" aria-pressed="true">Populated</button>
+          <button type="button" class="state-btn" data-state-target="loading" aria-pressed="false">Loading</button>
+          <button type="button" class="state-btn" data-state-target="empty" aria-pressed="false">Empty</button>
+          <button type="button" class="state-btn" data-state-target="error" aria-pressed="false">Error</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================================
+         STATE 1: LOADING STATE (Planetary Computer STAC + Aurora + TerraMind/THOR Skeleton)
+         ======================================================================== -->
+    <section id="view-state-loading" class="ui-state-banner state-panel-loading" aria-live="polite" hidden>
+      <div class="state-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span class="badge badge-cyan">STATE: LOADING // ĐỒNG BỘ PLANETARY COMPUTER STAC + SENTINEL-1/2/3 + SMAP + AURORA</span>
+          <code class="code-snippet">ClickHouse H3 ReplacingMergeTree | DoubleDelta + ZSTD</code>
+        </div>
+        <h2 class="section-title">Đang đồng bộ cảm biến ảo không cần IoT cho lưới lục giác Uber H3...</h2>
+        <p class="body-text">
+          Trợ lý Nông học Tham khảo đang giải phương trình cân bằng nước vùng rễ <code>0–28cm</code>, bốc hơi tham chiếu <code>FAO-56 Penman-Monteith ET0</code> và kiểm chứng nhân quả <code>chk_agro_fcst_zero_leakage</code>.
+        </p>
+        <div class="skeleton-grid">
+          <div class="skeleton-hex-box">
+            <span class="kpi-label">1/3 · VỆ TINH QUANG HỌC, NHIỆT &amp; RADAR</span>
+            <code class="code-snippet">TerraMind-1.0-base + THOR-1.0-base (S1/S2/S3/SMAP)</code>
+          </div>
+          <div class="skeleton-hex-box">
+            <span class="kpi-label">2/3 · VẬT LÝ NÔNG HỌC 7 CHỈ SỐ</span>
+            <code class="code-snippet">soil_moisture_root_zone · et0_mm_day · gdd</code>
+          </div>
+          <div class="skeleton-hex-box">
+            <span class="kpi-label">3/3 · MÔ PHỎNG NGHIÊN CỨU 14 NGÀY &amp; TRỢ LÝ AI</span>
+            <code class="code-snippet">microsoft/aurora + nvidia/cbottle + Qwen3.8-27B</code>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="btn-primary" id="btn-finish-loading">Hoàn tất đồng bộ &amp; Mở Trợ lý Nông học Tham khảo (Populated)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         STATE 2: EMPTY STATE (OvertureMaps Shift-Left Non-Agricultural Land)
+         ======================================================================== -->
+    <section id="view-state-empty" class="ui-state-banner state-panel-empty" aria-live="polite" hidden>
+      <div class="state-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span class="badge badge-amber">STATE: EMPTY // OVERTUREMAPS SHIFT-LEFT STREAM-GATE</span>
+          <code class="code-snippet">h3_res8 = 8865b10001fffff | land_use = primary_forest_core</code>
+        </div>
+        <h2 class="section-title">Ô lục giác H3 thuộc vùng lõi rừng đặc dụng hoặc mặt nước chưa có diện tích canh tác</h2>
+        <p class="body-text">
+          Bộ lọc <code>OvertureMaps land_use</code> xác nhận vị trí này không chứa đất nông nghiệp (<code>paddy</code>, <code>cropland</code>, <code>orchard</code>, <code>aquaculture</code>, <code>farmland</code>). Mời bác chuyển về vùng nông nghiệp trọng điểm để tư vấn mùa vụ.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn-primary" id="btn-return-mkd">Chuyển về Vùng Nông Nghiệp Trọng Điểm (ĐBSCL — VN_MKD)</button>
+          <button type="button" class="btn-secondary" id="btn-return-ch">Chuyển về Tây Nguyên (VN_CH — Cà Phê &amp; Sầu Riêng)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         STATE 3: ERROR STATE (Satellite Stream Timeout -> ClickHouse Vintage Fallback)
+         ======================================================================== -->
+    <section id="view-state-error" class="ui-state-banner state-panel-error" aria-live="assertive" hidden>
+      <div class="state-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <span class="badge badge-danger">STATE: ERROR // MẤT KẾT NỐI LUỒNG VỆ TINH THỜI GIAN THỰC (HTTP 504)</span>
+          <code class="code-snippet">FALLBACK: ClickHouse H3 Vintage Snapshot + AA-SKU-4 Offline</code>
+        </div>
+        <h2 class="section-title">Gián đoạn luồng vệ tinh thời gian thực — Đang dùng Bản chụp dự phòng ClickHouse H3 Vintage gần nhất</h2>
+        <p class="body-text">
+          Cổng đồng bộ vệ tinh thời gian thực phản hồi chậm. Hệ thống đã tự động chuyển sang bản chụp <code>ClickHouse H3 Vintage</code> gần nhất và gói tin <code>AA-SKU-4 Edge Offline (MobileNetV4 + VieNeu-TTS-v3-Nano + Gemma-4-E2B / Qwen3.5-0.8B, &lt; 5 KB)</code> để nông dân vẫn xem được chỉ số tưới tham khảo và soi lá bình thường.
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn-primary" id="btn-retry-satellite">Thử Lại Kết Nối Vệ Tinh (Khôi phục Populated)</button>
+          <button type="button" class="btn-secondary" id="btn-export-emergency-pack">Tải Gói Tin Dự Phòng Offline (&lt; 5 KB)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         STATE 4: POPULATED STATE — SPLIT-SCREEN COPILOT + SPATIAL H3 ATLAS
+         ======================================================================== -->
+    <main id="view-state-populated" class="main-viewport" role="main">
+      <!-- 1. 56PX LEFT NAVIGATION RAIL (1:1 LeftNavRail.tsx adapted for Agriculture) -->
+      <nav class="left-nav-rail" aria-label="Thanh điều hướng khuyến nông chính">
+        <!-- 1. + Mới -->
+        <button type="button" class="rail-action-btn is-primary" id="rail-new-btn" title="Tạo mùa vụ / cánh đồng mới">
+          <span class="rail-icon-box is-brand">＋</span>
+          <span class="rail-micro-label">+ Mới</span>
+        </button>
+
+        <div class="rail-divider"></div>
+
+        <!-- 2. Lịch sử -->
+        <button type="button" class="rail-action-btn" id="rail-history-btn" title="Lịch sử tư vấn mùa vụ">
+          <span class="rail-icon-box">💬</span>
+          <span class="rail-micro-label">Lịch sử</span>
+        </button>
+
+        <!-- 3. Sổ ruộng (Saved Fields Basket) -->
+        <button type="button" class="rail-action-btn" id="rail-fields-btn" title="Sổ ruộng đồng đã lưu">
+          <span class="rail-icon-box">
+            🌾
+            <span class="rail-count-badge" id="saved-fields-badge">3</span>
+          </span>
+          <span class="rail-micro-label">Sổ ruộng</span>
+        </button>
+
+        <!-- 4. Atlas (Nông lịch & Thời vụ) -->
+        <button type="button" class="rail-action-btn" id="rail-atlas-btn" title="Mở Nông lịch &amp; Thời vụ Việt Nam">
+          <span class="rail-icon-box">🗓️</span>
+          <span class="rail-micro-label">Atlas</span>
+        </button>
+
+        <!-- 5. Soi Lá AI (AA-SKU-4 MobileNetV4 + Gemma-4-E2B / Qwen3.5-0.8B) -->
+        <button type="button" class="rail-action-btn" id="rail-leaf-doctor-btn" title="Bác sĩ Soi Lá &amp; Đất AI (AA-SKU-4 MobileNetV4 + Gemma-4-E2B / Qwen3.5-0.8B)">
+          <span class="rail-icon-box">📷</span>
+          <span class="rail-micro-label">Soi Lá AI</span>
+        </button>
+
+        <!-- 6. Công cụ (Agro Toolkit Popover) -->
+        <div class="header-popover-anchor" style="width: 100%; display: flex; justify-content: center;">
+          <button type="button" class="rail-action-btn" id="rail-toolkit-btn" title="Công cụ tính toán nông học nhanh">
+            <span class="rail-icon-box">🧭</span>
+            <span class="rail-micro-label">Công cụ</span>
+          </button>
+          <div class="header-actions-popover" id="rail-toolkit-popover" style="left: 60px; top: 0; right: auto; width: 275px;" hidden>
+            <div class="kpi-label" style="padding: 4px 8px;">CÔNG CỤ KHUYẾN NÔNG TỰ TRỊ</div>
+            <button type="button" class="header-popover-item" data-toolkit-prompt="Tính lượng nước tưới chính xác hôm nay theo công thức FAO-56 Penman-Monteith ET0 và quy đổi ra số bình tưới / giờ bơm cho ruộng đang chọn.">
+              <span>💧 Tính nước tưới Penman-Monteith ET0</span>
+            </button>
+            <button type="button" class="header-popover-item" data-toolkit-prompt="Lập phác đồ bón phân thúc đòng / nuôi trái trong 14 ngày tới tránh các ngày mưa lớn gây rửa trôi phân bón.">
+              <span>🌱 Phác đồ bón phân né mưa rửa trôi</span>
+            </button>
+            <button type="button" class="header-popover-item" id="toolkit-morning-radio-btn">
+              <span>📻 Phát Đài Đồng Ruộng 5h30 Sáng</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- SLIDE-OVER DRAWER 1: LỊCH SỬ TƯ VẤN MÙA VỤ (288px) -->
+      <aside class="slide-over-drawer" id="drawer-history" hidden aria-label="Lịch sử tư vấn khuyến nông">
+        <div class="drawer-header-block">
+          <span class="drawer-heading-title">💬 Lịch Sử Tư Vấn Mùa Vụ</span>
+          <button type="button" class="drawer-close-icon-btn" data-close-drawer="drawer-history">✕</button>
+        </div>
+        <div class="drawer-scroll-body" id="history-drawer-list">
+          <!-- Populated by atlas-app.js -->
+        </div>
+      </aside>
+
+      <!-- SLIDE-OVER DRAWER 2: SỔ RUỘNG ĐỒNG ĐÃ LƯU (310px) -->
+      <aside class="slide-over-drawer" id="drawer-saved-fields" hidden aria-label="Sổ ruộng đồng đã lưu">
+        <div class="drawer-header-block">
+          <span class="drawer-heading-title">🌾 Sổ Ruộng Đồng Đã Lưu</span>
+          <button type="button" class="drawer-close-icon-btn" data-close-drawer="drawer-saved-fields">✕</button>
+        </div>
+        <div class="drawer-scroll-body" id="saved-fields-drawer-list">
+          <!-- Populated by atlas-app.js -->
+        </div>
+      </aside>
+
+      <!-- 2. LEFT PANE (44%): AI AGRO-COPILOT STREAM & FLOATING INPUT -->
+      <section class="chat-pane-wrapper" id="chat-pane-wrapper" aria-label="Trợ lý Khuyến nông AI">
+        <div class="chat-pane">
+          <div class="ambient-weather-glow" id="ambient-weather-glow"></div>
+
+          <div class="chat-messages-container" id="chat-messages-container">
+            <!-- 3-TIER EMPTY CHAT WELCOME (1:1 ChatStream.tsx adapted 100% for Agriculture) -->
+            <div class="empty-chat-welcome" id="empty-chat-welcome">
+              <!-- Tầng 1: Greeting Header -->
+              <div style="display: flex; flex-direction: column; align-items: center; max-width: 520px;">
+                <div class="welcome-mascot-orb" aria-hidden="true">🌾</div>
+                <h1 class="welcome-headline" id="welcome-greeting-headline">
+                  Chào bác nông dân! Hôm nay ruộng vườn của bác thế nào?
+                </h1>
+                <p class="welcome-subtitle">
+                  Chỉ số Nông học Tham khảo &amp; Trợ lý Cây trồng Không Cần IoT — 100% Khoa học Mở Phi lợi nhuận (MIT / Apache-2.0) với 4 SKU (Aurora, TerraMind/THOR, Qwen + VieNeu-TTS, MobileNetV4 Edge) &amp; Lưới Lục Giác Uber H3.
+                </p>
+              </div>
+
+              <!-- Tầng 2: 6 Bento Pills Vùng Nông Nghiệp Trọng Điểm Việt Nam -->
+              <div class="bento-section-wrap">
+                <div class="bento-section-label">
+                  ✨ 6 VÙNG CANH TÁC TRỌNG ĐIỂM VIỆT NAM • CẢM BIẾN ẢO H3 THỜI GIAN THỰC
+                </div>
+                <div class="hero-destinations-bento" id="hero-agro-zones-bento">
+                  <button type="button" class="bento-zone-pill" data-bento-h3="8765b566affffff">
+                    <div class="bento-zone-left">
+                      <span class="bento-zone-title">🌾 ĐBSCL • Lúa &amp; Sầu Riêng</span>
+                      <span class="bento-zone-sub">Cần Thơ, Bến Tre, Sóc Trăng</span>
+                    </div>
+                    <span class="bento-zone-badge is-amber">💧 Ẩm 59% · Mặn 1.8g/L</span>
+                  </button>
+
+                  <button type="button" class="bento-zone-pill" data-bento-h3="8765a214affffff">
+                    <div class="bento-zone-left">
+                      <span class="bento-zone-title">☕ Tây Nguyên • Cà Phê &amp; Hồ Tiêu</span>
+                      <span class="bento-zone-sub">Đắk Lắk, Lâm Đồng, Gia Lai</span>
+                    </div>
+                    <span class="bento-zone-badge is-amber">☀️ ET0 5.4mm · Cần tưới</span>
+                  </button>
+
+                  <button type="button" class="bento-zone-pill" data-bento-h3="87411845affffff">
+                    <div class="bento-zone-left">
+                      <span class="bento-zone-title">🌱 ĐB Sông Hồng • Lúa &amp; Rau Đông</span>
+                      <span class="bento-zone-sub">Thái Bình, Nam Định, Hải Dương</span>
+                    </div>
+                    <span class="bento-zone-badge">⛅ 19°C · GDD 311</span>
+                  </button>
+
+                  <button type="button" class="bento-zone-pill" data-bento-h3="87411cb2affffff">
+                    <div class="bento-zone-left">
+                      <span class="bento-zone-title">❄️ Tây Bắc • Mận, Chè &amp; Sương Muối</span>
+                      <span class="bento-zone-sub">Sơn La, Lào Cai, Hà Giang</span>
+                    </div>
+                    <span class="bento-zone-badge is-red">🥶 6°C · Nguy cơ sương muối</span>
+                  </button>
+
+                  <button type="button" class="bento-zone-pill" data-bento-h3="8765a632affffff">
+                    <div class="bento-zone-left">
+                      <span class="bento-zone-title">🌵 Miền Trung • Thanh Long, Nho &amp; Tỏi</span>
+                      <span class="bento-zone-sub">Ninh Thuận, Quảng Ngãi, Bình Thuận</span>
+                    </div>
+                    <span class="bento-zone-badge is-amber">🔥 Gió Lào · ET0 6.7mm</span>
+                  </button>
+
+                  <button type="button" class="bento-zone-pill" data-bento-h3="87659248affffff">
+                    <div class="bento-zone-left">
+                      <span class="bento-zone-title">🇻🇳 Hoàng Sa &amp; Trường Sa • Chủ Quyền VN</span>
+                      <span class="bento-zone-sub">Đà Nẵng &amp; Khánh Hòa (Việt Nam)</span>
+                    </div>
+                    <span class="bento-zone-badge">🛡️ Rau xanh &amp; Khí tượng đảo</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tầng 3: 4 Thẻ Starter Prompts Nông Nghiệp -->
+              <div class="starter-prompts-container" id="starter-prompts-container">
+                <button type="button" class="starter-prompt-card" data-starter-h3="8765a214affffff" data-starter-prompt="Đất trồng cà phê ở Đắk Lắk đang khô hạn, tính giúp lượng nước tưới hôm nay theo bốc hơi ET0">
+                  <span class="starter-icon-orb">💧</span>
+                  <span>"Đất trồng cà phê ở Đắk Lắk đang khô hạn, tính giúp lượng nước tưới hôm nay theo bốc hơi ET0"</span>
+                </button>
+
+                <button type="button" class="starter-prompt-card" data-starter-h3="8765b566affffff" data-starter-prompt="Kiểm tra ngưỡng chú ý xâm nhập mặn cửa sông Tiền & chỉ số nông học bệnh đạo ôn lúa vụ Đông Xuân tại ĐBSCL">
+                  <span class="starter-icon-orb">🌊</span>
+                  <span>"Kiểm tra ngưỡng chú ý xâm nhập mặn cửa sông Tiền &amp; chỉ số nông học bệnh đạo ôn lúa vụ Đông Xuân tại ĐBSCL"</span>
+                </button>
+
+                <button type="button" class="starter-prompt-card" data-starter-h3="87411cb2affffff" data-starter-prompt="Mô phỏng ngưỡng chú ý sương muối đêm nay ở Sơn La - Lào Cai và cách che phủ bảo vệ rau màu, mạ xuân">
+                  <span class="starter-icon-orb">❄️</span>
+                  <span>"Mô phỏng ngưỡng chú ý sương muối đêm nay ở Sơn La - Lào Cai và cách che phủ bảo vệ rau màu, mạ xuân"</span>
+                </button>
+
+                <button type="button" class="starter-prompt-card" data-starter-h3="87411845affffff" data-starter-prompt="Lập lịch bón phân thúc đòng cho lúa tránh ngày mưa lớn gây rửa trôi trong 14 ngày tới">
+                  <span class="starter-icon-orb">🌾</span>
+                  <span>"Lập lịch bón phân thúc đòng cho lúa tránh ngày mưa lớn gây rửa trôi trong 14 ngày tới"</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Live Conversation Stream -->
+            <div id="chat-stream-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+          </div>
+
+          <!-- FLOATING INPUT AT BOTTOM (3 Agricultural Context Pills + Vision + Voice + Input) -->
+          <div class="floating-input-wrapper">
+            <div class="context-pills-bar" aria-label="Bộ chọn ngữ cảnh canh tác nông nghiệp">
+              <button type="button" class="context-pill-btn" id="pill-crop" title="Bấm để đổi loại cây trồng / vật nuôi">
+                <span id="pill-crop-text">🌾 Lúa nước</span>
+              </button>
+              <button type="button" class="context-pill-btn" id="pill-stage" title="Bấm để đổi giai đoạn sinh trưởng">
+                <span id="pill-stage-text">🌱 Xuống giống - Đẻ nhánh</span>
+              </button>
+              <button type="button" class="context-pill-btn" id="pill-priority" title="Bấm để đổi ưu tiên canh tác">
+                <span id="pill-priority-text">💧 Tưới tiết kiệm ET0</span>
+              </button>
+              <button type="button" class="context-pill-btn is-vision" id="pill-open-leaf-doctor" title="Mở Bác sĩ Soi Lá &amp; Đất AI (AA-SKU-4 MobileNetV4 + Gemma-4-E2B / Qwen3.5-0.8B)">
+                <span>📷 Soi Lá AI</span>
+              </button>
+              <button type="button" class="context-pill-btn" id="pill-voice-dialect" title="Hỏi bằng giọng nói phương ngữ Việt Nam">
+                <span>🎙️ Nói tiếng địa phương</span>
+              </button>
+            </div>
+
+            <form class="animated-gradient-border-card" id="chat-input-form">
+              <div class="animated-gradient-border-card-inner">
+                <input
+                  type="text"
+                  id="chat-prompt-input"
+                  class="chat-input-textarea"
+                  aria-label="Nhập câu hỏi tham khảo nông học cho Agriculture Atlas"
+                  value=""
+                />
+                <button type="button" class="voice-mic-btn" id="btn-voice-input" title="Đọc câu hỏi bằng giọng nói">
+                  🎙️
+                </button>
+                <button type="submit" class="send-round-btn" id="btn-send-chat" title="Gửi câu hỏi tới Agriculture Atlas">
+                  ➤
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. DRAGGABLE SPLIT-PANE RESIZER BAR (30% - 66%, Default 44%) -->
+      <div class="split-pane-resizer" id="split-pane-resizer" role="separator" aria-label="Kéo để thay đổi tỷ lệ khung Chat và Bản đồ H3">
+        <div class="split-resizer-line"></div>
+        <div class="split-resizer-handle">⋮</div>
+        <div class="split-resizer-presets">
+          <button type="button" class="split-preset-btn" data-split-pct="58">Chat</button>
+          <button type="button" class="split-preset-btn active" data-split-pct="44">Cân bằng</button>
+          <button type="button" class="split-preset-btn" data-split-pct="32">Bản đồ</button>
+        </div>
+      </div>
+
+      <!-- 4. RIGHT PANE (56%): SPATIAL RIGHT PANE WITH 4 AGRO TABS -->
+      <section class="map-pane-wrapper" id="map-pane-wrapper" aria-label="Bản đồ tương tác H3 và 4 Tab Không gian Nông nghiệp">
+        <div class="spatial-right-pane">
+          <!-- TOP 4-TAB SPATIAL DOCK -->
+          <div class="spatial-top-nav-dock">
+            <div class="spatial-tabs-strip" role="tablist" aria-label="4 Tab Không gian Nông nghiệp">
+              <button type="button" class="spatial-tab-btn active" role="tab" aria-selected="true" data-spatial-tab="doppler">
+                <span>📡 01 · Radar &amp; Lưới H3 Cảm Biến Ảo</span>
+              </button>
+              <button type="button" class="spatial-tab-btn" role="tab" aria-selected="false" data-spatial-tab="spline">
+                <span>📈 02 · Mô Phỏng 14 Ngày (Aurora &amp; FAO-56)</span>
+              </button>
+              <button type="button" class="spatial-tab-btn" role="tab" aria-selected="false" data-spatial-tab="atlas">
+                <span>🗓️ 03 · Nông Lịch &amp; Thời Vụ Việt Nam</span>
+              </button>
+              <button type="button" class="spatial-tab-btn" role="tab" aria-selected="false" data-spatial-tab="passport">
+                <span>🪪 04 · Hộ Chiếu Ruộng Đồng &amp; Offline &lt; 5KB</span>
+              </button>
+            </div>
+            <span class="badge badge-emerald" id="active-h3-badge">H3: 8765b566affffff</span>
+          </div>
+
+          <!-- ================================================================
+               SPATIAL TAB 01: RADAR & LƯỚI H3 CẢM BIẾN ẢO (Interactive Map + Layers)
+               ================================================================ -->
+          <div class="spatial-tab-panel" id="spatial-panel-doppler" role="tabpanel">
+            <div class="map-canvas-stage">
+              <!-- Floating Layer Pill Bar & Commune/Province Search -->
+              <div class="map-top-left-controls">
+                <div class="map-layer-pill" id="agro-map-layer-switcher" role="group" aria-label="Chọn lớp phủ bản đồ nông nghiệp">
+                  <button type="button" class="map-layer-btn active" data-agro-layer="soil_moisture_root_zone">💧 Ẩm đất SMAP</button>
+                  <button type="button" class="map-layer-btn" data-agro-layer="et0_mm_day">☀️ Bốc hơi ET0</button>
+                  <button type="button" class="map-layer-btn" data-agro-layer="salinity_risk_index">🌊 Độ mặn</button>
+                  <button type="button" class="map-layer-btn" data-agro-layer="frost_risk_index">❄️ Sương muối</button>
+                  <button type="button" class="map-layer-btn" data-agro-layer="leaf_wetness_hours">🍄 Đọng sương lá</button>
+                  <button type="button" class="map-layer-btn" data-agro-layer="precip">🌧️ Mưa</button>
+                  <button type="button" class="map-layer-btn" data-agro-layer="wind">💨 Gió</button>
+                </div>
+
+                <div class="map-search-box">
+                  <span>🔍</span>
+                  <input type="search" id="map-region-search" class="map-search-input" aria-label="Tìm Xã, Huyện, Tỉnh hoặc Vùng canh tác" />
+                </div>
+              </div>
+
+              <!-- Interactive Vietnam Uber H3 Hexagonal SVG Map (Includes Hoàng Sa & Trường Sa Sovereignty) -->
+              <svg id="vietnam-h3-svg" class="vietnam-h3-svg" viewBox="0 0 580 650" role="img" aria-label="Bản đồ tương tác Lưới Lục Giác Uber H3 Việt Nam bao gồm Quần đảo Hoàng Sa và Trường Sa">
+                <defs>
+                  <pattern id="h3-coord-grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(148, 163, 184, 0.1)" stroke-width="1" />
+                  </pattern>
+                </defs>
+                <rect x="0" y="0" width="580" height="650" fill="url(#h3-coord-grid)" />
+
+                <!-- Maritime EEZ Sovereignty Line -->
+                <path d="M 215 55 C 325 90, 505 148, 535 290 C 555 420, 525 565, 395 620 C 260 645, 145 628, 95 570"
+                      fill="none" stroke="#00F0FF" stroke-width="1.3" stroke-dasharray="5,4" opacity="0.6" />
+                <text x="305" y="78" fill="#00F0FF" font-family="JetBrains Mono" font-size="11" font-weight="700">
+                  BIỂN ĐÔNG — CHỦ QUYỀN VIỆT NAM (ISO: VN)
+                </text>
+
+                <!-- Mainland Vietnam Contour -->
+                <path d="M 145 52 L 228 58 L 252 105 L 222 155 L 258 225 L 315 295 L 338 385 L 322 465 L 245 522 L 185 588 L 125 576 L 140 505 L 205 450 L 235 385 L 225 305 L 175 215 L 125 135 Z"
+                      fill="rgba(19, 27, 46, 0.85)" stroke="rgba(16, 185, 129, 0.45)" stroke-width="1.6" />
+
+                <!-- Sovereign Archipelagos: Hoàng Sa (Đà Nẵng) & Trường Sa (Khánh Hòa) -->
+                <rect x="362" y="215" width="195" height="112" rx="8" fill="rgba(15, 23, 42, 0.88)" stroke="#00F0FF" stroke-width="1.3" stroke-dasharray="4,3" />
+                <text x="372" y="234" fill="#00F0FF" font-family="JetBrains Mono" font-size="11.5" font-weight="700">🇻🇳 QUẦN ĐẢO HOÀNG SA</text>
+                <text x="372" y="249" fill="#e2e8f0" font-family="Inter" font-size="11">(TP. Đà Nẵng — Việt Nam)</text>
+
+                <rect x="362" y="432" width="195" height="128" rx="8" fill="rgba(15, 23, 42, 0.88)" stroke="#00F0FF" stroke-width="1.3" stroke-dasharray="4,3" />
+                <text x="372" y="451" fill="#00F0FF" font-family="JetBrains Mono" font-size="11.5" font-weight="700">🇻🇳 QUẦN ĐẢO TRƯỜNG SA</text>
+                <text x="372" y="466" fill="#e2e8f0" font-family="Inter" font-size="11">(Tỉnh Khánh Hòa — Việt Nam)</text>
+
+                <!-- Zone Callout Labels -->
+                <text x="32" y="95" fill="#94a3b8" font-family="JetBrains Mono" font-size="11">VN_RRD_NWM (Bắc Bộ)</text>
+                <text x="88" y="268" fill="#94a3b8" font-family="JetBrains Mono" font-size="11">VN_CCC (Miền Trung)</text>
+                <text x="142" y="418" fill="#94a3b8" font-family="JetBrains Mono" font-size="11">VN_CH (Tây Nguyên)</text>
+                <text x="36" y="546" fill="#94a3b8" font-family="JetBrains Mono" font-size="11">VN_MKD (ĐBSCL)</text>
+
+                <!-- Dynamic H3 Hexagons Layer -->
+                <g id="h3-hex-layer" role="list" aria-label="Các ô lục giác H3 nông nghiệp Việt Nam"></g>
+              </svg>
+
+              <!-- Flush Left-Edge Active Layer Legend -->
+              <div class="doppler-edge-legend-tab" id="map-active-layer-legend">
+                <span>💧 Lớp phủ: Độ ẩm đất vùng rễ SMAP (0–28cm)</span>
+              </div>
+
+              <!-- Floating Bottom-Right H3 Cell Popup Inspector (With 1-Click "Hỏi Bác Sĩ Khuyến Nông AI") -->
+              <div class="map-h3-popup-card" id="map-h3-popup-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                  <span class="badge badge-emerald" id="popup-traffic-badge">AMBER // CẦN TƯỚI</span>
+                  <code id="popup-h3-code">8765b566affffff</code>
+                </div>
+                <h3 id="popup-cell-title" style="font-size: 14px;">Cần Thơ — ĐBSCL (Lúa Đông Xuân &amp; Sầu riêng Ri6)</h3>
+                <p class="caption" id="popup-folk-advice">
+                  Độ ẩm rễ 34.8% (đất khô 1 đốt ngón tay) · ET0 5.42 mm/ngày · Độ mặn 1.8g/L.
+                </p>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                  <button type="button" class="chat-action-pill is-primary" id="btn-ask-ai-from-map">
+                    💬 Hỏi Bác Sĩ Khuyến Nông AI
+                  </button>
+                  <button type="button" class="chat-action-pill" id="btn-save-field-from-map">
+                    ＋ Lưu Sổ ruộng
+                  </button>
+                  <button type="button" class="chat-action-pill" id="btn-speak-from-map">
+                    🔊 Đọc to
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================================
+               SPATIAL TAB 02: MÔ PHỎNG NGHIÊN CỨU 14 NGÀY (AURORA + CBOTTLE-SR + FAO-56)
+               ================================================================ -->
+          <div class="spatial-tab-panel" id="spatial-panel-spline" role="tabpanel" hidden>
+            <div class="spatial-scroll-content">
+              <div class="spatial-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                  <div>
+                    <h2 class="section-title">Mô Phỏng Nghiên Cứu 14 Ngày: Microsoft Aurora + NVIDIA cBottle-SR / FourCastNet-3</h2>
+                    <p class="caption" id="spline-cell-subtitle">Ô H3: 8765b566affffff — Chỉ số nông học tham khảo (Zero-Future-Leakage Verified)</p>
+                  </div>
+                  <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <span class="badge badge-emerald">● microsoft/aurora (v1.5 · 0.1° · MIT)</span>
+                    <span class="badge badge-cyan">● nvidia/cbottle &amp; fourcastnet3</span>
+                    <span class="badge badge-amber">● FAO-56 Penman-Monteith</span>
+                  </div>
+                </div>
+
+                <!-- Interactive SVG 14-Day Spline Chart -->
+                <div style="background: var(--bg-space-deep); border: 1px solid var(--border-glass); border-radius: 10px; padding: 8px;">
+                  <svg id="aurora-forecast-svg" viewBox="0 0 620 185" style="width: 100%; height: auto; display: block;" role="img" aria-label="Biểu đồ mô phỏng nghiên cứu 14 ngày Microsoft Aurora và FAO-56"></svg>
+                </div>
+
+                <!-- 7 Virtual Agro-Sensor Twin Live Readout Grid (Required 7 Indicators) -->
+                <div class="sensor-mini-grid-7" id="sensor-kpi-grid">
+                  <div class="sensor-mini-cell">
+                    <span class="sensor-mini-label">1. soil_moisture_root_zone</span>
+                    <span class="kpi-number" id="val-soil_moisture_root_zone">34.8%</span>
+                  </div>
+                  <div class="sensor-mini-cell">
+                    <span class="sensor-mini-label">2. et0_mm_day</span>
+                    <span class="kpi-number" id="val-et0_mm_day">5.42 mm/d</span>
+                  </div>
+                  <div class="sensor-mini-cell">
+                    <span class="sensor-mini-label">3. gdd_accumulated</span>
+                    <span class="kpi-number" id="val-gdd_accumulated">1,142 °C·d</span>
+                  </div>
+                  <div class="sensor-mini-cell">
+                    <span class="sensor-mini-label">4. salinity_risk_index</span>
+                    <span class="kpi-number" id="val-salinity_risk_index">64.5 /100</span>
+                  </div>
+                  <div class="sensor-mini-cell">
+                    <span class="sensor-mini-label">5. frost_risk_index</span>
+                    <span class="kpi-number" id="val-frost_risk_index">2.0 /100</span>
+                  </div>
+                  <div class="sensor-mini-cell">
+                    <span class="sensor-mini-label">6. leaf_wetness_hours</span>
+                    <span class="kpi-number" id="val-leaf_wetness_hours">11.5 h/24h</span>
+                  </div>
+                  <div class="sensor-mini-cell">
+                    <span class="sensor-mini-label">7. crop_stress_gravity_score</span>
+                    <span class="kpi-number" id="val-crop_stress_gravity_score">58.2 /100</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================================
+               SPATIAL TAB 03: NÔNG LỊCH & THỜI VỤ VIỆT NAM (6 Seasonal Windows)
+               ================================================================ -->
+          <div class="spatial-tab-panel" id="spatial-panel-atlas" role="tabpanel" hidden>
+            <div class="spatial-scroll-content">
+              <div class="spatial-card">
+                <h2 class="section-title">🗓️ Nông Lịch &amp; 6 Cửa Sổ Thời Vụ Vàng Việt Nam (Tháng 1 – Tháng 12)</h2>
+                <p class="caption">Chọn mùa vụ để đẩy phác đồ tham khảo canh tác (<code>AA-SKU-3 Qwen/Qwen3.8-27B + Qwen3.6-35B-A3B</code>) thẳng sang khung Chat</p>
+                <div class="seasonal-atlas-grid" id="seasonal-atlas-grid">
+                  <!-- Populated by atlas-app.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================================
+               SPATIAL TAB 04: HỘ CHIẾU RUỘNG ĐỒNG, ĐÀI 5H30 & OFFLINE < 5KB
+               ================================================================ -->
+          <div class="spatial-tab-panel" id="spatial-panel-passport" role="tabpanel" hidden>
+            <div class="spatial-scroll-content">
+              <!-- Morning 5:30 AM Field Radio Card -->
+              <div class="spatial-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                  <div>
+                    <h2 class="section-title">📻 Đài Phát Thanh Đồng Ruộng 5h30 Sáng (Tap-to-Speak)</h2>
+                    <p class="caption">Bản tin khuyến nông tự động đọc bằng tiếng Việt dân dã cho nông hộ &amp; hợp tác xã</p>
+                  </div>
+                  <button type="button" class="btn-primary" id="btn-play-morning-radio">🔊 Nghe Bản Tin 5h30 Sáng</button>
+                </div>
+                <p class="body-text" id="morning-radio-script-text">
+                  "Bà con ở Cần Thơ lưu ý: Ba ngày tới nước mặn ngoài sông Hậu dâng cao, sáng mai bà con tranh thủ bơm nước ngọt vào mương nội đồng và khoan rải phân đạm vì lá lúa đang ẩm 11.5 tiếng dễ phát bệnh đạo ôn!"
+                </p>
+              </div>
+
+              <!-- Offline < 5KB Field Delta Packet Exporter -->
+              <div class="spatial-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                  <div>
+                    <h2 class="section-title">📦 Gói Tin Đồng Bộ Đồng Ruộng Offline (&lt; 5 KB) — AA-SKU-4 Edge Offline</h2>
+                    <p class="caption">Nén zlib + Base64 cho điện thoại Android $50–$70 (MobileNetV4 + VieNeu-TTS-v3-Nano + Gemma-4-E2B / Qwen3.5-0.8B) chạy không cần sóng 4G ngoài ruộng</p>
+                  </div>
+                  <span class="badge badge-emerald" id="packet-byte-badge">764 BYTES (&lt; 5 KB)</span>
+                </div>
+                <pre class="code-snippet" id="offline-packet-preview" style="max-height: 155px; overflow-y: auto; padding: 8px; color: #00F0FF;"></pre>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" class="btn-primary" id="btn-generate-packet">⬇️ Tải Gói Tin Offline (.json &lt; 5 KB)</button>
+                  <button type="button" class="btn-secondary" id="btn-copy-packet">📋 Sao chép JSON</button>
+                </div>
+                <p class="caption" id="packet-status-msg">Đã kết nối API thực `/api/v1/agro/delta-packet/{h3_index}`.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MOBILE 3-TAB BOTTOM SWITCHER -->
+      <nav class="mobile-view-tabs" aria-label="Chuyển đổi khung nhìn trên điện thoại">
+        <button type="button" class="mobile-tab-btn active" data-mobile-pane="chat">💬 Trợ lý AI</button>
+        <button type="button" class="mobile-tab-btn" data-mobile-pane="map">🗺️ Bản đồ H3</button>
+        <button type="button" class="mobile-tab-btn" data-mobile-pane="fields">🌾 Sổ ruộng</button>
+      </nav>
+    </main>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 1: BÁC SĨ SOI LÁ & ĐẤT ĐA PHƯƠNG THỨC (AA-SKU-4 MobileNetV4 + Gemma-4-E2B / Qwen3.5-0.8B)
+       (100% Air-Gapped Open-Science Multimodal Leaf & Soil Inspection Modal)
+       ========================================================================== -->
+  <div class="paywall-modal-backdrop" id="modal-leaf-doctor" hidden role="dialog" aria-modal="true" aria-labelledby="leaf-doctor-title">
+    <div class="paywall-modal-shell">
+      <div class="paywall-header">
+        <div>
+          <h2 class="section-title" id="leaf-doctor-title">📷 Bác Sĩ Soi Lá &amp; Đất Đa Phương Thức — AA-SKU-4 (MobileNetV4 + Gemma-4-E2B / Qwen3.5-0.8B)</h2>
+          <p class="caption">Nhận diện dấu hiệu bệnh cây trồng &amp; độ khô/mặn của đất kèm hướng dẫn tham khảo theo đơn vị dân dã (nắp chai, bình 16L, đốt ngón tay)</p>
+        </div>
+        <button type="button" class="drawer-close-icon-btn" id="btn-close-leaf-doctor">✕</button>
+      </div>
+      <div class="paywall-body">
+        <div class="paywall-tier-grid" id="leaf-doctor-samples-grid">
+          <article class="paywall-tier-card">
+            <span class="badge badge-danger">MẪU 01 · LÚA ĐÔNG XUÂN ĐBSCL</span>
+            <h3>🌾 Bệnh Đạo Ôn Lá Lúa (Magnaporthe oryzae)</h3>
+            <p class="body-text">Vết bệnh hình mắt én màu nâu xám do đọng sương lá 11.5h/24h kèm thừa đạm.</p>
+            <button type="button" class="btn-primary" data-diagnose-sample="rice_blast">🔍 Chẩn đoán &amp; Đọc phác đồ</button>
+          </article>
+
+          <article class="paywall-tier-card">
+            <span class="badge badge-amber">MẪU 02 · SẦU RIÊNG &amp; HỒ TIÊU</span>
+            <h3>🍈 Nấm Thối Rễ &amp; Xì Mủ Thân (Phytophthora)</h3>
+            <p class="body-text">Vết thâm ướt trên vỏ thân và vàng lá rụng hàng loạt sau mưa ngập hoặc sương mù dày.</p>
+            <button type="button" class="btn-primary" data-diagnose-sample="durian_phytophthora">🔍 Chẩn đoán &amp; Đọc phác đồ</button>
+          </article>
+
+          <article class="paywall-tier-card">
+            <span class="badge badge-amber">MẪU 03 · CÀ PHÊ TÂY NGUYÊN</span>
+            <h3>☕ Bệnh Gỉ Sắt Lá Cà Phê &amp; Khô Cành</h3>
+            <p class="body-text">Đốm bột màu da cam mặt dưới lá cà phê Robusta kết hợp thiếu hụt ẩm tầng rễ 0–28cm.</p>
+            <button type="button" class="btn-primary" data-diagnose-sample="coffee_rust">🔍 Chẩn đoán &amp; Đọc phác đồ</button>
+          </article>
+
+          <article class="paywall-tier-card">
+            <span class="badge badge-cyan">MẪU 04 · SOI ĐẤT CỬA SÔNG</span>
+            <h3>🌊 Đất Nứt Nẻ &amp; Kết Tinh Muối Mặn (&gt; 3.5g/L)</h3>
+            <p class="body-text">Bề mặt ruộng trắng phèn mặn, độ ẩm vùng rễ giảm dưới 25% cần rửa mặn khẩn cấp.</p>
+            <button type="button" class="btn-primary" data-diagnose-sample="saline_soil">🔍 Chẩn đoán &amp; Đọc phác đồ</button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: 4 SKU KHOA HỌC MỞ (Azure NVIDIA GPU & NVIDIA Brev, 100% MIT / Apache-2.0)
+       ========================================================================== -->
+  <div class="paywall-modal-backdrop" id="modal-open-science-skus" hidden role="dialog" aria-modal="true" aria-labelledby="sku-modal-title">
+    <div class="paywall-modal-shell">
+      <div class="paywall-header">
+        <div>
+          <h2 class="section-title" id="sku-modal-title">🌱 100% Khoa Học Mở Phi Lợi Nhuận (UN SDG #2 &amp; #13) — 4 SKU Golden Open-Science Stack</h2>
+          <p class="caption">Azure NVIDIA GPU &amp; NVIDIA Brev · 100% MIT / Apache-2.0 · Zero-IoT H3 Sensor Twin · Chạy miễn phí cho nông dân Việt Nam &amp; Toàn cầu</p>
+        </div>
+        <button type="button" class="drawer-close-icon-btn" id="btn-close-sku-modal">✕</button>
+      </div>
+      <div class="paywall-body">
+        <div class="paywall-tier-grid">
+          <div class="paywall-tier-card" data-sku-demo-h3="8765b571affffff" data-sku-demo-prompt="Chạy thử AA-SKU-1 (microsoft/aurora v1.5 + 0.1° + wave + air-pollution, nvidia/cbottle cBottle-SR, nvidia/fourcastnet3 + FAO-56): Mô phỏng nghiên cứu 14 ngày bốc thoát hơi nước ET0, độ ẩm tầng rễ và ngưỡng chú ý xâm nhập mặn tại Bến Tre" style="cursor: pointer;">
+            <span class="badge badge-cyan">AA-SKU-1 · ATMOSPHERIC &amp; AGRO-PHYSICS</span>
+            <h3>microsoft/aurora + nvidia/cbottle + nvidia/fourcastnet3</h3>
+            <p class="body-text">Hợp nhất <code>microsoft/aurora</code> (<code>v1.5</code> + <code>0.1°</code> + <code>wave</code> + <code>air-pollution</code>, MIT), <code>nvidia/cbottle</code> (<code>cBottle-SR</code>) và <code>nvidia/fourcastnet3</code> (Apache-2.0) cùng FAO-56 Penman-Monteith cho mô phỏng nghiên cứu 14 ngày từng ô H3.</p>
+            <button type="button" class="btn-primary">⚡ Bấm chạy thử AA-SKU-1</button>
+          </div>
+          <div class="paywall-tier-card" data-sku-demo-h3="8765a632affffff" data-sku-demo-prompt="Chạy thử AA-SKU-2 (ibm-esa-geospatial/TerraMind-1.0-base + FM4CS/THOR-1.0-base): Hợp nhất vệ tinh Sentinel-1 SAR, Sentinel-2, Sentinel-3 Thermal &amp; SMAP tính crop_stress_gravity_score tại Ninh Thuận" style="cursor: pointer;">
+            <span class="badge badge-emerald">AA-SKU-2 · MULTI-SENSOR EARTH OBSERVATION</span>
+            <h3>ibm-esa-geospatial/TerraMind-1.0-base + FM4CS/THOR-1.0-base</h3>
+            <p class="body-text">Mô hình nền tảng địa không gian Apache-2.0 hợp nhất Sentinel-1 SAR + Sentinel-2 + Sentinel-3 Thermal + SMAP qua Planetary Computer STAC &amp; GEE Non-Commercial để chấm chỉ số <code>crop_stress_gravity_score</code>.</p>
+            <button type="button" class="btn-primary">⚡ Bấm chạy thử AA-SKU-2</button>
+          </div>
+          <div class="paywall-tier-card" data-sku-demo-h3="8765a214affffff" data-sku-demo-prompt="Chạy thử AA-SKU-3 (Qwen/Qwen3.8-27B NVFP4 + Qwen3.6-35B-A3B + Qwen3-ASR-1.7B + VieNeu-TTS-v3-Turbo): Lập lịch tưới cà phê tham khảo theo FAO-56 ET0 và đọc giọng phương ngữ Tây Nguyên tại Đắk Lắk" style="cursor: pointer;">
+            <span class="badge badge-cyan">AA-SKU-3 · REASONING &amp; VOICE COPILOT</span>
+            <h3>Qwen/Qwen3.8-27B + Qwen3.6-35B-A3B + Qwen3-ASR-1.7B + VieNeu-TTS-v3-Turbo</h3>
+            <p class="body-text">Bộ đôi suy luận <code>Qwen/Qwen3.8-27B</code> (<code>nvidia/Qwen3.8-27B-NVFP4</code>) &amp; <code>Qwen/Qwen3.6-35B-A3B</code> cùng nhận diện giọng nói <code>Qwen/Qwen3-ASR-1.7B</code> và <code>pnnbao-ump/VieNeu-TTS-v3-Turbo</code> (Apache-2.0, 23 giọng Bắc–Trung–Nam).</p>
+            <button type="button" class="btn-primary">⚡ Bấm chạy thử AA-SKU-3</button>
+          </div>
+          <div class="paywall-tier-card" data-sku-demo-h3="87411cb2affffff" data-sku-demo-prompt="Chạy thử AA-SKU-4 (timm/mobilenetv4_conv_small + VieNeu-TTS-v3-Nano + google/gemma-4-E2B-it litert-lm &amp; Qwen/Qwen3.5-0.8B): Xuất gói tin H3 Offline &lt; 5 KB ngưỡng chú ý sương muối Sơn La" style="cursor: pointer;">
+            <span class="badge badge-emerald">AA-SKU-4 · POCKET EDGE OFFLINE</span>
+            <h3>timm/mobilenetv4_conv_small + VieNeu-TTS-v3-Nano + Gemma-4-E2B / Qwen3.5-0.8B</h3>
+            <p class="body-text">Soi lá tại chỗ với <code>timm/mobilenetv4_conv_small</code>, phát giọng <code>pnnbao-ump/VieNeu-TTS-v3-Nano</code> cùng <code>google/gemma-4-E2B-it</code> (<code>litert-lm</code>, 4GB) &amp; <code>Qwen/Qwen3.5-0.8B</code> (2–3GB) (Apache-2.0, <code>&lt; 5 KB</code> H3 Delta).</p>
+            <button type="button" class="btn-primary">⚡ Bấm chạy thử AA-SKU-4</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/atlas-app.js?v=2"></script>
+</body>
+</html>

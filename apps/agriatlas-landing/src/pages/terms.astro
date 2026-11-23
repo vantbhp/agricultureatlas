@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LegalView from '../components/LegalView.astro';
+import { legal } from '../i18n/legal';
+import { t } from '../i18n/ui';
+import type { Lang } from '../i18n/types';
+
+const lang: Lang = 'en';
+const doc = legal[lang].terms;
+---
+
+<BaseLayout lang={lang} title={`${doc.title} — Agriculture Atlas`} description={t(lang, 'meta.description')} path="/terms">
+  <LegalView lang={lang} doc={doc} />
+</BaseLayout>

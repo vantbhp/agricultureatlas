@@ -1,0 +1,89 @@
+{
+  "project_id": "agriculture_atlas_org",
+  "project_name": "Agriculture Atlas",
+  "domain": "https://agricultureatlas.org",
+  "chat_domain_en": "https://agricultureatlas.org/en/chat",
+  "chat_domain_vi": "https://agricultureatlas.org/vi/chat",
+  "research_domain_en": "https://agricultureatlas.org/research",
+  "research_domain_vi": "https://agricultureatlas.org/vi/research",
+  "api_domain": "https://api.agricultureatlas.org",
+  "github_repo": "https://github.com/vantbhp/agricultureatlas",
+  "principal_investigator": "Van Le (Lê Thành Văn)",
+  "orcid": "https://orcid.org/0009-0005-3514-106X",
+  "compute_platform": "Microsoft Azure NVIDIA GPUs (A100/H100) & NVIDIA Brev",
+  "sku_count": 4,
+  "air_gapped_open_science": true,
+  "wave": "wave_2_open_science_azure_aurora_golden_stack",
+  "locked_at_utc": "2026-11-23T19:15:00+07:00",
+  "sha256_contracts": {
+    "PRD.md": "3a0644a451b9781130704a008f1c1cf9a2e31979fe600d92a0138e1a58cc533b",
+    "configs/DESIGN_ART_DIRECTION_LOCK.json": "7d5c4b89b0374ff41b8bde4873299026aaa2aaab18ca38bf052767a16e7b4e31",
+    "migrations/001_clickhouse_h3_agro_virtual_sensor_vn.sql": "02ea12f677e0dc6c255f8b5e19bb050ad76711df6bfc5b0c56cbdda2624cdf4e",
+    "migrations/002_postgis_overture_agro_landuse_vn.sql": "9f7cb4c7428ccfbbc0743a0ba846ad88d5923738c58d0da4d5934fd63b18265c"
+  },
+  "disjoint_wave1_scopes": {
+    "backend_physics": [
+      "services/agriatlas-gateway/app/__init__.py",
+      "services/agriatlas-gateway/app/core/__init__.py",
+      "services/agriatlas-gateway/app/core/agro_physics_engine.py",
+      "services/agriatlas-gateway/app/main.py",
+      "tests/test_agro_physics_and_api.py"
+    ],
+    "web_scientific_atlas": [
+      "apps/agriatlas-web/index.html",
+      "apps/agriatlas-web/styles/scientific-atlas.css",
+      "apps/agriatlas-web/js/atlas-app.js"
+    ],
+    "mobile_zero_literacy": [
+      "apps/agriatlas-mobile-zero-literacy/lib/zero_literacy_home_screen.dart",
+      "apps/agriatlas-mobile-zero-literacy/preview/zero-literacy-simulator.html",
+      "tests/test_ui_typography_and_states.py"
+    ],
+    "public_landing": [
+      "apps/agriatlas-landing/package.json",
+      "apps/agriatlas-landing/astro.config.mjs",
+      "apps/agriatlas-landing/src/i18n/types.ts",
+      "apps/agriatlas-landing/src/i18n/ui.ts",
+      "apps/agriatlas-landing/src/i18n/legal.ts",
+      "apps/agriatlas-landing/src/layouts/BaseLayout.astro",
+      "apps/agriatlas-landing/src/components/",
+      "apps/agriatlas-landing/src/styles/",
+      "apps/agriatlas-landing/src/pages/",
+      "tests/test_landing_static_build.py"
+    ]
+  },
+  "amendments": [
+    {
+      "file": "PRD.md",
+      "at": "2026-11-04T16:52:00+07:00",
+      "approved_by": "Founder",
+      "reason": "Legal & editorial review: fix data-licence statement; reference-agronomic-indices positioning (no forecasts/warnings); model status; typo",
+      "sha256_before": "f9915603a68fa7eb0046a9d72623d680617f17baf967e6c6bd4cdf340592daf0",
+      "sha256_after": "90715603a68fa7eb0046a9d72623d680617f17baf967e6c6bd4cdf340592daf0"
+    },
+    {
+      "file": "PRD.md, configs/DESIGN_ART_DIRECTION_LOCK.json, migrations/001_*.sql, migrations/002_*.sql",
+      "at": "2026-11-12T04:31:00+07:00",
+      "approved_by": "Founder",
+      "reason": "Full repository synchronization to Agriculture Atlas (https://agricultureatlas.org), 100% Air-Gapped Non-Commercial Open-Science discipline, relative path hygiene, and offline system font stack",
+      "sha256_after": {
+        "PRD.md": "320e5addde9fb187de3e704c132e8e936f8e9412f57cbcd9baceba78f1714a7a",
+        "configs/DESIGN_ART_DIRECTION_LOCK.json": "7d5c4b89b0374ff41b8bde4873299026aaa2aaab18ca38bf052767a16e7b4e31",
+        "migrations/001_clickhouse_h3_agro_virtual_sensor_vn.sql": "22c886fbe17358c75f521dd01cf9c3f4e2275f9d3a39675104cf1dc1f59a8ba5",
+        "migrations/002_postgis_overture_agro_landuse_vn.sql": "9f7cb4c7428ccfbbc0743a0ba846ad88d5923738c58d0da4d5934fd63b18265c"
+      }
+    },
+    {
+      "file": "PRD.md, migrations/001_clickhouse_h3_agro_virtual_sensor_vn.sql",
+      "at": "2026-11-23T19:15:00+07:00",
+      "approved_by": "Founder",
+      "reason": "Open-Science reboot to 4-SKU Golden Stack (MIT/Apache-2.0) on Microsoft Azure NVIDIA GPUs & NVIDIA Brev: Microsoft Aurora 1.5/0.1deg + NVIDIA cBottle/FourCastNet3 + TerraMind-1.0/THOR-1.0 + Qwen3.8-27B NVFP4/VieNeu-TTS-v3-Turbo + MobileNetV4/Gemma-4-E2B/Qwen3.5-0.8B; Zenodo/OSF Technical Report & CITATION.cff; bilingual /research portal; VN KTTV regulatory alignment; GitHub https://github.com/vantbhp/agricultureatlas",
+      "sha256_after": {
+        "PRD.md": "3a0644a451b9781130704a008f1c1cf9a2e31979fe600d92a0138e1a58cc533b",
+        "configs/DESIGN_ART_DIRECTION_LOCK.json": "7d5c4b89b0374ff41b8bde4873299026aaa2aaab18ca38bf052767a16e7b4e31",
+        "migrations/001_clickhouse_h3_agro_virtual_sensor_vn.sql": "02ea12f677e0dc6c255f8b5e19bb050ad76711df6bfc5b0c56cbdda2624cdf4e",
+        "migrations/002_postgis_overture_agro_landuse_vn.sql": "9f7cb4c7428ccfbbc0743a0ba846ad88d5923738c58d0da4d5934fd63b18265c"
+      }
+    }
+  ]
+}

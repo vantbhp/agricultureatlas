@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ChatStandbyView from '../../components/ChatStandbyView.astro';
+import { t } from '../../i18n/ui';
+import type { Lang } from '../../i18n/types';
+
+const lang: Lang = 'vi';
+---
+
+<BaseLayout
+  lang={lang}
+  title={`Trợ lý & Bản đồ lưới H3 — Agriculture Atlas`}
+  description={t(lang, 'meta.description')}
+  path="/chat"
+>
+  <ChatStandbyView lang={lang} />
+</BaseLayout>

@@ -1,0 +1,52 @@
+---
+import { t } from '../i18n/ui';
+import { LANGS, localePath, type Lang } from '../i18n/types';
+
+interface Props {
+  lang: Lang;
+  /** Site-relative, unlocalized path, e.g. '/' or '/privacy'. */
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+---
+
+<nav class="lang-switch" aria-label={t(lang, 'nav.lang_label')}>
+  <ul role="list">
+    {
+      LANGS.map((l) => (
+        <li>
+          <a
+            href={localePath(path, l)}
+            hreflang={l}
+            lang={l}
+            aria-current={l === lang ? 'true' : undefined}
+            class:list={['lang-link', { active: l === lang }]}
+          >
+            {l.toUpperCase()}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .lang-switch ul { display: flex; align-items: center; gap: 2px; margin: 0; padding: 4px; list-style: none; border: 1px solid var(--line-strong); border-radius: 999px; }
+  .lang-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 38px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    text-decoration: none;
+    border-radius: 999px;
+    transition: color 200ms var(--ease), background-color 200ms var(--ease);
+  }
+  .lang-link:hover { color: var(--text); }
+  .lang-link.active { color: #04161A; background: var(--text); }
+</style>

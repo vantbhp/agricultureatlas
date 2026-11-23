@@ -1,0 +1,48 @@
+---
+import { t } from '../i18n/ui';
+import { localePath, type Lang, type LegalDoc } from '../i18n/types';
+
+interface Props {
+  lang: Lang;
+  doc: LegalDoc;
+}
+
+const { lang, doc } = Astro.props;
+---
+
+<article class="legal container">
+  <header class="legal-head">
+    <h1>{doc.title}</h1>
+    <p class="updated">
+      {t(lang, 'legal.updated')}: <time datetime={doc.updated}>{doc.updated}</time>
+    </p>
+  </header>
+  <div class="legal-body">
+    {
+      doc.sections.map((s) => (
+        <section class="legal-section">
+          <h2>{s.heading}</h2>
+          {s.body.map((para) => (
+            <p>{para}</p>
+          ))}
+        </section>
+      ))
+    }
+    <p class="back">
+      <a class="btn btn-ghost" href={localePath('/', lang)}><span aria-hidden="true">←</span> {t(lang, 'legal.back_home')}</a>
+    </p>
+  </div>
+</article>
+
+<style>
+  .legal { padding-block: 140px 120px; display: grid; gap: 48px; }
+  .legal-head { display: grid; gap: 16px; }
+  .legal-head h1 { font-size: var(--fs-xl); }
+  .updated { font-family: var(--mono); font-size: 13px; color: var(--text-3); }
+  .legal-body { max-width: 72ch; }
+  .legal-section { display: grid; gap: 10px; padding: 28px 0; border-top: 1px solid var(--line); }
+  .legal-section h2 { font-size: var(--fs-m); font-stretch: 92%; }
+  .legal-section p { color: var(--text-2); }
+  .back { margin-top: 32px; }
+  @media (min-width: 1024px) { .legal { grid-template-columns: 4fr 7fr; gap: 72px; } .legal-head { align-content: start; position: sticky; top: 120px; } }
+</style>
